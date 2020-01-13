@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot>
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/aleph2</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="chromosom_R">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="chromosom_L">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="kolo_FL">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="kolo_FR">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="kolo_RL">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="kolo_RR">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="maszt">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <gazebo reference="manip_base">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="manip_B">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_C">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_D">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_efector">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_jaw_L">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_jaw_R">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+</robot>

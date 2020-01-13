@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find aleph2_description)/launch/visualization.launch" pass_all_args="true"/>
+  <include file="$(find aleph2_description)/launch/joint_pub.launch" pass_all_args="true"/>
+</launch>
