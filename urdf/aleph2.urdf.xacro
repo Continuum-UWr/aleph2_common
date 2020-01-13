@@ -359,10 +359,10 @@
     </inertial>
   </link> 
 
-  <link name="manip_grasper_link">
+  <link name="manip_gripper_link">
     <visual>
       <geometry>
-          <mesh filename="package://aleph2_description/meshes/manip_grasper.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_gripper.STL"/>
       </geometry>
       <origin rpy="0 ${pi/2} 0"/>
       <material name="manip" />
@@ -564,7 +564,7 @@
     <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="manip_wrist_joint" type="revolute">
+  <joint name="manip_wrist_tilt_joint" type="revolute">
     <parent link="manip_elbow_link"/>
     <child link="manip_wrist_link"/>
     <origin xyz="0.4 0 0" />
@@ -573,17 +573,17 @@
     <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="manip_grasper_joint" type="revolute">
+  <joint name="manip_wrist_roll_joint" type="revolute">
     <parent link="manip_wrist_link"/>
-    <child link="manip_grasper_link"/>
+    <child link="manip_gripper_link"/>
     <origin xyz="0.06 0 0" rpy="${-pi/2} 0 0"/>
     <axis xyz="-1 0 0" />
     <limit effort="32000" lower="${-pi}" upper="${pi}" velocity="0.5"/>
     <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="manip_grip_joint" type="prismatic">
-    <parent link="manip_grasper_link"/>
+  <joint name="manip_gripper_joint" type="prismatic">
+    <parent link="manip_gripper_link"/>
     <child link="manip_jaw_L_link"/>
     <origin xyz="0.025 -0.03 0"/>
     <axis xyz="0 1 0" />
@@ -591,18 +591,18 @@
     <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="manip_grip_joint_mimic" type="prismatic">
-    <parent link="manip_grasper_link"/>
+  <joint name="manip_gripper_joint_mimic" type="prismatic">
+    <parent link="manip_gripper_link"/>
     <child link="manip_jaw_R_link"/>
     <origin xyz="0.025 0.03 0"/>
     <axis xyz="0 -1 0" />
-    <mimic joint="manip_grip_joint" />
+    <mimic joint="manip_gripper_joint" />
     <limit effort="150" lower="-0.033" upper="0" velocity="0.05"/>
     <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
   <joint name="manip_effector_tip_joint" type="fixed">
-    <parent link="manip_grasper_link"/>
+    <parent link="manip_gripper_link"/>
     <child link="manip_effector_tip_link"/>
     <origin xyz="0.20 0 0"/>
     <dynamics damping="0.0" friction="0.1"/>
@@ -704,34 +704,34 @@
     </actuator>
   </transmission>
 
-  <transmission name="manip_wrist_transmission">
+  <transmission name="manip_wrist_tilt_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="manip_wrist_joint">
+    <joint name="manip_wrist_tilt_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="manip_wrist_actuator">
+    <actuator name="manip_wrist_tilt_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="manip_grasper_transmission">
+  <transmission name="manip_wrist_roll_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="manip_grasper_joint">
+    <joint name="manip_wrist_roll_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="manip_grasper_actuator">
+    <actuator name="manip_wrist_roll_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="manip_grip_transmission">
+  <transmission name="manip_gripper_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="manip_grip_joint">
+    <joint name="manip_gripper_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="manip_grip_actuator">
+    <actuator name="manip_gripper_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>

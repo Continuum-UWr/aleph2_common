@@ -60,7 +60,7 @@
     <selfCollide>true</selfCollide>
   </gazebo>
 
-  <gazebo reference="manip_grasper_link">
+  <gazebo reference="manip_gripper_link">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
