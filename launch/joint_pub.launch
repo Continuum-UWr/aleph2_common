@@ -5,7 +5,7 @@
 
   <arg name="source_list" default="[manipulator_joint_states]" />
   <arg name="published_topic" default="joint_states" />
-  <arg name="zeros" default="{B_to_base: 1.5708}" />
+  <arg name="zeros" default="{manip_shoulder_joint: 1.5708}" />
 
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" required="true" output="screen">
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />

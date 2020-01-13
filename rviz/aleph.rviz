@@ -1,15 +1,14 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 84
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /Effort1/efector_grip1
-      Splitter Ratio: 0.485246003
-    Tree Height: 466
+      Splitter Ratio: 0.4852460026741028
+    Tree Height: 362
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -18,7 +17,7 @@ Panels:
       - /2D Nav Goal1
       - /Publish Point1
     Name: Tool Properties
-    Splitter Ratio: 0.588679016
+    Splitter Ratio: 0.5886790156364441
   - Class: rviz/Views
     Expanded:
       - /Current View1
@@ -29,6 +28,10 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: ""
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
 Visualization Manager:
   Class: ""
   Displays:
@@ -38,7 +41,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.0299999993
+        Line Width: 0.029999999329447746
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -65,50 +68,81 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        chromosom_L:
+        manip_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        chromosom_R:
+        manip_effector_tip_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        manip_elbow_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        efector_grip:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        efector_roll:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        imu:
+        manip_grasper_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_B:
+        manip_jaw_L_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_C:
+        manip_jaw_R_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_base:
+        manip_shoulder_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_efector:
+        manip_wrist_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_support:
+        mast_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rocker_L_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rocker_R_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_FL_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_FR_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_RL_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_RR_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        zed_position:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -126,25 +160,37 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: true
-        chromosom_L:
+        manip_base_link:
           Value: true
-        chromosom_R:
+        manip_effector_tip_link:
           Value: true
-        efector_grip:
+        manip_elbow_link:
           Value: true
-        efector_roll:
+        manip_grasper_link:
           Value: true
-        imu:
+        manip_jaw_L_link:
           Value: true
-        manip_B:
+        manip_jaw_R_link:
           Value: true
-        manip_C:
+        manip_shoulder_link:
           Value: true
-        manip_base:
+        manip_wrist_link:
           Value: true
-        manip_efector:
+        mast_link:
           Value: true
-        manip_support:
+        rocker_L_link:
+          Value: true
+        rocker_R_link:
+          Value: true
+        wheel_FL_link:
+          Value: true
+        wheel_FR_link:
+          Value: true
+        wheel_RL_link:
+          Value: true
+        wheel_RR_link:
+          Value: true
+        zed_position:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -153,77 +199,37 @@ Visualization Manager:
       Show Names: false
       Tree:
         base_link:
-          chromosom_L:
-            {}
-          chromosom_R:
-            {}
-          imu:
-            {}
-          manip_support:
-            manip_base:
-              manip_B:
-                manip_C:
-                  manip_efector:
-                    efector_grip:
+          manip_base_link:
+            manip_shoulder_link:
+              manip_elbow_link:
+                manip_wrist_link:
+                  manip_grasper_link:
+                    manip_effector_tip_link:
                       {}
-                    efector_roll:
+                    manip_jaw_L_link:
                       {}
+                    manip_jaw_R_link:
+                      {}
+          mast_link:
+            {}
+          rocker_L_link:
+            wheel_FL_link:
+              {}
+            wheel_RL_link:
+              {}
+          rocker_R_link:
+            wheel_FR_link:
+              {}
+            wheel_RR_link:
+              {}
+          zed_position:
+            {}
       Update Interval: 0
-      Value: true
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
-      Enabled: true
-      Name: InteractiveMarkers
-      Show Axes: false
-      Show Descriptions: true
-      Show Visual Aids: false
-      Update Topic: /efector_marker/update
-      Value: true
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
-      Enabled: true
-      Name: InteractiveMarkers
-      Show Axes: false
-      Show Descriptions: true
-      Show Visual Aids: true
-      Update Topic: /goal_marker/update
-      Value: true
-    - Alpha: 0.5
-      B_to_base:
-        Value: true
-      C_to_B:
-        Value: true
-      Class: rviz/Effort
-      Enabled: true
-      History Length: 1
-      Joints:
-        {}
-      Name: Effort
-      Robot Description: robot_description
-      Scale: 0.200000003
-      Topic: /joint_states
-      Unreliable: false
-      Value: true
-      Width: 0.0199999996
-      base_to_frame:
-        Value: true
-      efector_grip:
-        Value: true
-      efector_roll:
-        Value: true
-      efector_to_C:
-        Value: true
-    - Class: rviz/MarkerArray
-      Enabled: true
-      Marker Topic: /mission_control/markers
-      Name: MarkerArray
-      Namespaces:
-        mission_control_marker_view: true
-      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
     Background Color: 200; 200; 200
+    Default Light: true
     Fixed Frame: base_link
     Frame Rate: 30
   Name: root
@@ -235,7 +241,10 @@ Visualization Manager:
     - Class: rviz/FocusCamera
     - Class: rviz/Measure
     - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
       Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
     - Class: rviz/SetGoal
       Topic: /move_base_simple/goal
     - Class: rviz/PublishPoint
@@ -245,9 +254,9 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 13.6446686
+      Distance: 2.942761182785034
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.0599999987
+        Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
@@ -256,29 +265,30 @@ Visualization Manager:
         Y: 0
         Z: 0
       Focal Shape Fixed Size: true
-      Focal Shape Size: 0.0500000007
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.00999999978
-      Pitch: 0.784796953
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.47479724884033203
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 2.82902932
+      Yaw: 5.717198371887207
     Saved: ~
 Window Geometry:
-  Displays:
+  "&Displays":
     collapsed: false
-  Height: 746
+  "&Time":
+    collapsed: false
+  "&Views":
+    collapsed: false
+  Height: 707
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001560000025afc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003a0000025a000000c600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c0000026100000001000001080000025afc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003a0000025a0000009e00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000055400000036fc0100000002fb0000000800540069006d00650100000000000005540000024400fffffffb0000000800540069006d00650100000000000004500000000000000000000002ea0000025a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000020bfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000007601000003fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000440000020b000000f701000003fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c0000026100000001000001100000020bfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0056006900650077007301000000440000020b000000d001000003fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005560000004cfc0100000002fb0000000800540069006d0065010000000000000556000002ad01000003fb0000000800540069006d00650100000000000004500000000000000000000002da0000020b00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
-    collapsed: false
-  Time:
     collapsed: false
   Tool Properties:
     collapsed: false
-  Views:
-    collapsed: false
-  Width: 1364
+  Width: 1366
   X: 0
-  Y: 20
+  Y: 0

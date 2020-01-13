@@ -2,36 +2,78 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"
        name="aleph2">
 
-
   <xacro:include filename="$(find aleph2_description)/urdf/aleph2.gazebo" />
+  <xacro:include filename="$(find aleph2_description)/urdf/materials.xacro" />
 
-  <material name="lazik">
-    <color rgba="0.3 0.3 0.3 1"/>
-  </material>
-  <material name="chromosom">
-    <color rgba="0 0 0.8 1"/>
-  </material>
-  <material name="kolo">
-    <texture filename="package://aleph_viz/textures/wheel.jpg" />
-  </material>
-  <material name="manip">
-    <color rgba="0.4 0.4 0.4 1"/>
-  </material>
-  <material name="maszt">
-    <color rgba="0.8 0.8 0.8 1" />
-  </material>
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/base.STL" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      <material name="base" />
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.02" length="0.12" />
+      </geometry>
+      <origin xyz="0.06 0.125 0.063" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.016" length="0.1" />
+      </geometry>
+      <origin xyz="0.151 0.175 0.053" />
+      <material name="encoder">
+        <color rgba="0 0.5 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.72 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.08 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.16 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.06 0 0.09"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.02" length="0.12" />
+      </geometry>
+      <origin xyz="0.06 0.125 0.063" />
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.016" length="0.1" />
+      </geometry>
+      <origin xyz="0.151 0.175 0.053" />
+    </collision>
+    <inertial>
+      <origin xyz="-0.06700 0.00064 0.00551"/>
+      <mass value="9.0" />
+      <inertia ixx="0.23691" ixy="-0.00014" ixz="-0.00314" 
+               iyy="0.23328" iyz="-0.00054" izz="0.40961" />
+    </inertial>
+  </link>
 
-  <xacro:macro name="chromosom" params="name">
-    <link name="chromosom_${name}">
+  <xacro:macro name="rocker" params="name">
+    <link name="rocker_${name}_link">
       <visual>
         <geometry>
-          <mesh filename="package://aleph_viz/meshes/chromosom.STL"/>
+          <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
         </geometry>
-        <material name="chromosom" />
+        <material name="rocker" />
       </visual>
       <collision>
         <geometry>
-          <mesh filename="package://aleph_viz/meshes/chromosom_collision.STL" />
+          <mesh filename="package://aleph2_description/meshes/rocker_collision.STL" />
         </geometry>
       </collision>
       <inertial>
@@ -43,13 +85,13 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="kolo" params="name"> 
-    <link name="kolo_${name}">
+  <xacro:macro name="wheel" params="name"> 
+    <link name="wheel_${name}_link">
       <visual>
         <geometry>
-          <mesh filename="package://aleph_viz/meshes/kolo.STL"/>
+          <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
         </geometry>
-        <material name="kolo" />
+        <material name="wheel" />
       </visual>
       <visual>
         <geometry>
@@ -90,83 +132,18 @@
     </link>
   </xacro:macro>
 
-  <link name="base_link">
+  <xacro:rocker name="R" />
+  <xacro:rocker name="L" />
+
+  <xacro:wheel name="FR" />
+  <xacro:wheel name="RR" />
+  <xacro:wheel name="FL" />
+  <xacro:wheel name="RL" />
+
+  <link name="manip_base_link">
     <visual>
       <geometry>
-        <mesh filename="package://aleph_viz/meshes/lazik.STL" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
-      <material name="lazik" />
-    </visual>
-    <visual>
-      <geometry>
-        <cylinder radius="0.02" length="0.12" />
-      </geometry>
-      <origin xyz="0.06 0.125 0.063" />
-      <material name="silnik">
-        <color rgba="0 0 0.5 1"/>
-      </material>
-    </visual>
-    <visual>
-      <geometry>
-        <cylinder radius="0.016" length="0.1" />
-      </geometry>
-      <origin xyz="0.151 0.175 0.053" />
-      <material name="enkoder">
-        <color rgba="0 0.5 0 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.72 0.5 0.1"/>
-      </geometry>
-      <origin xyz="-0.08 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <box size="0.16 0.5 0.1"/>
-      </geometry>
-      <origin xyz="-0.06 0 0.09"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder radius="0.02" length="0.12" />
-      </geometry>
-      <origin xyz="0.06 0.125 0.063" />
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder radius="0.016" length="0.1" />
-      </geometry>
-      <origin xyz="0.151 0.175 0.053" />
-    </collision>
-    <inertial>
-      <origin xyz="-0.06700 0.00064 0.00551"/>
-      <mass value="9.0" />
-      <inertia ixx="0.23691" ixy="-0.00014" ixz="-0.00314" 
-               iyy="0.23328" iyz="-0.00054" izz="0.40961" />
-    </inertial>
-  </link>
-
-  <xacro:chromosom name="R" />
-  <xacro:chromosom name="L" />
-
-  <xacro:kolo name="FR" />
-  <xacro:kolo name="RR" />
-  <xacro:kolo name="FL" />
-  <xacro:kolo name="RL" />
-
-  <!-- <link name="manip_support">
-    <inertial>
-      <mass value="0.0" />
-      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
-    </inertial>
-  </link> -->
-
-  <link name="manip_base">
-    <visual>
-      <geometry>
-          <mesh filename="package://aleph_viz/meshes/A.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_base.STL"/>
       </geometry>
       <origin rpy="${pi/2} 0 ${-pi/2}"/>
       <material name="manip" />
@@ -203,10 +180,10 @@
     </inertial>
   </link>
 
-  <link name="manip_B">
+  <link name="manip_shoulder_link">
     <visual>
       <geometry>
-          <mesh filename="package://aleph_viz/meshes/B.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_shoulder.STL"/>
       </geometry>
       <origin rpy="${pi} 0 0"/>
       <material name="manip" />
@@ -216,7 +193,7 @@
         <cylinder radius="0.0225" length="0.122"/>
       </geometry>
       <origin xyz="0.082 0 0.106" rpy="0 0 0" />
-      <material name="silnik">
+      <material name="motor">
         <color rgba="0 0 0.5 1"/>
       </material> 
     </visual>
@@ -225,7 +202,7 @@
         <cylinder radius="0.0225" length="0.122"/>
       </geometry>
       <origin xyz="0.2 0 0.106" rpy="0 0 0" />
-      <material name="silnik">
+      <material name="motor">
         <color rgba="0 0 0.5 1"/>
       </material> 
     </visual>
@@ -269,7 +246,7 @@
         <cylinder radius="0.0225" length="0.122"/>
       </geometry>
       <origin xyz="0.082 0 0.106" rpy="0 0 0" />
-      <material name="silnik">
+      <material name="motor">
         <color rgba="0 0 0.5 1"/>
       </material> 
     </collision>
@@ -278,7 +255,7 @@
         <cylinder radius="0.0225" length="0.122"/>
       </geometry>
       <origin xyz="0.2 0 0.106" rpy="0 0 0" />
-      <material name="silnik">
+      <material name="motor">
         <color rgba="0 0 0.5 1"/>
       </material> 
     </collision>
@@ -308,10 +285,10 @@
     </inertial>
   </link>
 
-  <link name="manip_C">
+  <link name="manip_elbow_link">
     <visual>
       <geometry>
-          <mesh filename="package://aleph_viz/meshes/C.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_elbow.STL"/>
       </geometry>
       <origin rpy="0 ${pi/2} 0"/>
       <material name="manip" />
@@ -342,10 +319,10 @@
     </inertial>
   </link>
 
-  <link name="manip_D">
+  <link name="manip_wrist_link">
     <visual>
       <geometry>
-          <mesh filename="package://aleph_viz/meshes/D.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_wrist.STL"/>
       </geometry>
       <origin rpy="0 ${pi/2} 0"/>
       <material name="manip" />
@@ -355,7 +332,7 @@
         <cylinder radius="0.02" length="0.108"/>
       </geometry>
       <origin xyz="-0.03 0 0" rpy="0 ${pi/2} 0"/>
-      <material name="silnik">
+      <material name="motor">
         <color rgba="0 0 0.5 1"/>
       </material>
     </visual>
@@ -382,10 +359,10 @@
     </inertial>
   </link> 
 
-  <link name="manip_efector">
+  <link name="manip_grasper_link">
     <visual>
       <geometry>
-          <mesh filename="package://aleph_viz/meshes/efector.STL"/>
+          <mesh filename="package://aleph2_description/meshes/manip_grasper.STL"/>
       </geometry>
       <origin rpy="0 ${pi/2} 0"/>
       <material name="manip" />
@@ -416,10 +393,10 @@
     </inertial>
   </link>
 
-  <link name="manip_jaw_L">
+  <link name="manip_jaw_L_link">
     <visual>
       <geometry>
-        <mesh filename="package://aleph_viz/meshes/jaw.STL" />
+        <mesh filename="package://aleph2_description/meshes/manip_jaw.STL" />
       </geometry>
       <origin rpy="${-pi/2} 0 ${pi/2}"/>
       <material name="manip" />
@@ -438,10 +415,10 @@
     </inertial>
   </link>
 
-  <link name="manip_jaw_R">
+  <link name="manip_jaw_R_link">
     <visual>
       <geometry>
-        <mesh filename="package://aleph_viz/meshes/jaw.STL" />
+        <mesh filename="package://aleph2_description/meshes/manip_jaw.STL" />
       </geometry>
       <origin rpy="${-pi/2} ${pi} ${pi/2}"/>
       <material name="manip" />
@@ -460,15 +437,15 @@
     </inertial>
   </link>
 
-  <link name="efector_tip"/>
+  <link name="manip_effector_tip_link"/>
 
-  <link name="maszt">
+  <link name="mast_link">
     <visual>
       <geometry>
         <cylinder radius="0.02" length="1.3" />
       </geometry>
       <origin xyz="0 0 0.65" rpi="0 0 0"/>
-      <material name="maszt" />
+      <material name="mast" />
     </visual>
     <collision>
       <geometry>
@@ -492,7 +469,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://aleph_viz/meshes/ZED.stl" />
+          <mesh filename="package://aleph2_description/meshes/ZED.stl" />
         </geometry>
       <material name="light_grey">
         <color rgba="0.8 0.8 0.8 1"/>
@@ -503,155 +480,152 @@
         <box size="0.035 0.18 0.032"/>
       </geometry>
     </collision>
-    <inertial>
-      <mass value="1.0" />
-      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
-    </inertial>
   </link>
 
 
+  <!-- ROCKERS -->
 
-  <!-- CHROMOSOMY -->
-
-  <joint name="chromosom_R_to_base" type="fixed">
+  <joint name="rocker_R_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="chromosom_R"/>
+    <child link="rocker_R_link"/>
       <origin xyz="0 -0.375 0" rpy="${pi/2} 0 ${pi}"/>
   </joint>
 
-  <joint name="chromosom_L_to_base" type="fixed">
+  <joint name="rocker_L_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="chromosom_L"/>
+    <child link="rocker_L_link"/>
       <origin xyz="0 0.375 0" rpy="${pi/2} 0 0"/>
   </joint>
 
-  <!-- KOLA -->
+  <!-- WHEELS -->
 
-  <joint name="kolo_FR_to_chromosom_R" type="continuous">
-    <parent link="chromosom_R"/>
-    <child link="kolo_FR"/>
+  <joint name="wheel_FR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_FR_link"/>
     <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
     <axis xyz="0 1 0"/>
+    <dynamics damping="0.0" friction="0.2"/>
+    <limit effort="1000" velocity="5.0"/>
   </joint>
 
-  <joint name="kolo_RR_to_chromosom_R" type="continuous">
-    <parent link="chromosom_R"/>
-    <child link="kolo_RR"/>
+  <joint name="wheel_RR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_RR_link"/>
     <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
     <axis xyz="0 -1 0"/>
+    <dynamics damping="0.0" friction="0.2"/>
+    <limit effort="1000" velocity="5.0"/>
   </joint>
 
-  <joint name="kolo_FL_to_chromosom_L" type="continuous">
-    <parent link="chromosom_L"/>
-    <child link="kolo_FL"/>
+  <joint name="wheel_FL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_FL_link"/>
     <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
     <axis xyz="0 1 0"/>
+    <dynamics damping="0.0" friction="0.2"/>
+    <limit effort="1000" velocity="5.0"/>
   </joint>
 
-  <joint name="kolo_RL_to_chromosom_L" type="continuous">
-    <parent link="chromosom_L"/>
-    <child link="kolo_RL"/>
+  <joint name="wheel_RL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_RL_link"/>
     <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
     <axis xyz="0 -1 0"/>
+    <dynamics damping="0.0" friction="0.2"/>
+    <limit effort="1000" velocity="5.0"/>
   </joint>
 
   <!-- MANIP -->
 
-  <!-- <joint name="support_to_base" type="fixed">
+  <joint name="manip_base_joint" type="continuous">
     <parent link="base_link"/>
-    <child link="manip_support"/>
-    <origin xyz="0.151 0.0035 0.0"/>
-  </joint> -->
-
-  <joint name="base_to_frame" type="continuous">
-    <parent link="base_link"/>
-    <child link="manip_base"/>
+    <child link="manip_base_link"/>
     <origin xyz="0.151 0.0035 0.032"/>
     <axis xyz="0 0 1"/>
     <limit effort="32000" velocity="0.15"/> 
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="B_to_base" type="revolute">
-    <parent link="manip_base"/>
-    <child link="manip_B"/>
+  <joint name="manip_shoulder_joint" type="revolute">
+    <parent link="manip_base_link"/>
+    <child link="manip_shoulder_link"/>
     <origin xyz="0 0 0.09" rpy="${pi/2} 0 0"/>
     <axis xyz="0 0 1" />
-    <limit effort="32000" lower="0.0" upper="3.14" velocity="0.3"/>
-    <dynamics damping="10" friction="0.1"/>
+    <limit effort="32000" lower="0.0" upper="${pi}" velocity="0.3"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="C_to_B" type="revolute">
-    <parent link="manip_B"/>
-    <child link="manip_C"/>
+  <joint name="manip_elbow_joint" type="revolute">
+    <parent link="manip_shoulder_link"/>
+    <child link="manip_elbow_link"/>
     <origin xyz="0.4 0 0" rpy="${pi} 0 0" />
     <axis xyz="0 0 -1" />
     <limit effort="32000" lower="-2.28" upper="2.43" velocity="0.5"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="efector_to_C" type="revolute">
-    <parent link="manip_C"/>
-    <child link="manip_D"/>
+  <joint name="manip_wrist_joint" type="revolute">
+    <parent link="manip_elbow_link"/>
+    <child link="manip_wrist_link"/>
     <origin xyz="0.4 0 0" />
     <axis xyz="0 0 -1" />
     <limit effort="32000" lower="-2.2" upper="2.2" velocity="0.5"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="efector_roll" type="revolute">
-    <parent link="manip_D"/>
-    <child link="manip_efector"/>
+  <joint name="manip_grasper_joint" type="revolute">
+    <parent link="manip_wrist_link"/>
+    <child link="manip_grasper_link"/>
     <origin xyz="0.06 0 0" rpy="${-pi/2} 0 0"/>
     <axis xyz="-1 0 0" />
     <limit effort="32000" lower="${-pi}" upper="${pi}" velocity="0.5"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="efector_grip" type="prismatic">
-    <parent link="manip_efector"/>
-    <child link="manip_jaw_L"/>
+  <joint name="manip_grip_joint" type="prismatic">
+    <parent link="manip_grasper_link"/>
+    <child link="manip_jaw_L_link"/>
     <origin xyz="0.025 -0.03 0"/>
     <axis xyz="0 1 0" />
     <limit effort="150" lower="-0.033" upper="0" velocity="0.05"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="efector_grip_mimic" type="prismatic">
-    <parent link="manip_efector"/>
-    <child link="manip_jaw_R"/>
+  <joint name="manip_grip_joint_mimic" type="prismatic">
+    <parent link="manip_grasper_link"/>
+    <child link="manip_jaw_R_link"/>
     <origin xyz="0.025 0.03 0"/>
     <axis xyz="0 -1 0" />
-    <mimic joint="efector_grip" />
+    <mimic joint="manip_grip_joint" />
     <limit effort="150" lower="-0.033" upper="0" velocity="0.05"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
-  <joint name="efector_tip_to_manip_efector" type="fixed">
-    <parent link="manip_efector"/>
-    <child link="efector_tip"/>
+  <joint name="manip_effector_tip_joint" type="fixed">
+    <parent link="manip_grasper_link"/>
+    <child link="manip_effector_tip_link"/>
     <origin xyz="0.20 0 0"/>
-    <dynamics damping="10" friction="0.1"/>
+    <dynamics damping="0.0" friction="0.1"/>
   </joint>
 
   <!-- MASZT -->
 
-  <joint name="maszt_to_base" type="fixed">
+  <joint name="mast_joint" type="fixed">
     <parent link="base_link" />
-    <child link="maszt" />
+    <child link="mast_link" />
     <origin xyz="-0.22 0.25 -0.15"/>
   </joint>
 
   <!-- ZED -->
 
-  <joint name="zed_camera_to_base" type="fixed">
+  <joint name="zed_camera_joint" type="fixed">
     <parent link="base_link"/>
     <child link="zed_position"/>
     <origin xyz="0.265 -0.16 0.015"/>
   </joint>
 
     
-  <transmission name="kolo_FR_transmission">
+  <!-- <transmission name="kolo_FR_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="kolo_FR_to_chromosom_R">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
@@ -691,6 +665,50 @@
     </joint>
     <actuator name="kolo_RL_actuator">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission> -->
+
+  <transmission name="kolo_FR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="kolo_FR_to_chromosom_R">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="kolo_FR_actuator">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="kolo_FL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="kolo_FL_to_chromosom_L">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="kolo_FL_actuator">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="kolo_RR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="kolo_RR_to_chromosom_R">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="kolo_RR_actuator">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="kolo_RL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="kolo_RL_to_chromosom_L">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="kolo_RL_actuator">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -760,5 +778,13 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
+
+  <!-- <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0.0 0.0 2.0"/>
+  </joint> -->
 
 </robot>
