@@ -625,155 +625,113 @@
   </joint>
 
     
-  <!-- <transmission name="kolo_FR_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_FR_to_chromosom_R">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="kolo_FR_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
+  <!-- TRASNMISSIONS -->
 
-  <transmission name="kolo_FL_transmission">
+  <transmission name="wheel_FR_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_FL_to_chromosom_L">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="kolo_FL_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="kolo_RR_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_RR_to_chromosom_R">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="kolo_RR_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="kolo_RL_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_RL_to_chromosom_L">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="kolo_RL_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission> -->
-
-  <transmission name="kolo_FR_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_FR_to_chromosom_R">
+    <joint name="wheel_FR_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="kolo_FR_actuator">
+    <actuator name="wheel_FR_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="kolo_FL_transmission">
+  <transmission name="wheel_FL_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_FL_to_chromosom_L">
+    <joint name="wheel_FL_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="kolo_FL_actuator">
+    <actuator name="wheel_FL_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="kolo_RR_transmission">
+  <transmission name="wheel_RR_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_RR_to_chromosom_R">
+    <joint name="wheel_RR_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="kolo_RR_actuator">
+    <actuator name="wheel_RR_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="kolo_RL_transmission">
+  <transmission name="wheel_RL_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="kolo_RL_to_chromosom_L">
+    <joint name="wheel_RL_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="kolo_RL_actuator">
+    <actuator name="wheel_RL_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="base_to_frame_transmission">
+  <transmission name="manip_base_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="base_to_frame">
+    <joint name="manip_base_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="base_to_frame_actuator">
+    <actuator name="manip_base_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="B_to_base_transmission">
+  <transmission name="manip_shoulder_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="B_to_base">
+    <joint name="manip_shoulder_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="B_to_base_actuator">
+    <actuator name="manip_shoulder_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="C_to_B_transmission">
+  <transmission name="manip_elbow_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="C_to_B">
+    <joint name="manip_elbow_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="C_to_B_actuator">
+    <actuator name="manip_elbow_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="efector_to_C_transmission">
+  <transmission name="manip_wrist_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="efector_to_C">
+    <joint name="manip_wrist_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="efector_to_C_actuator">
+    <actuator name="manip_wrist_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="efector_roll_transmission">
+  <transmission name="manip_grasper_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="efector_roll">
+    <joint name="manip_grasper_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="efector_roll_actuator">
+    <actuator name="manip_grasper_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="efector_grip_transmission">
+  <transmission name="manip_grip_transmission">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="efector_grip">
+    <joint name="manip_grip_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="efector_grip_actuator">
+    <actuator name="manip_grip_actuator">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
