@@ -504,8 +504,8 @@
     <child link="wheel_FR_link"/>
     <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.0" friction="0.2"/>
-    <limit effort="1000" velocity="5.0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
   </joint>
 
   <joint name="wheel_RR_joint" type="continuous">
@@ -513,8 +513,8 @@
     <child link="wheel_RR_link"/>
     <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
     <axis xyz="0 -1 0"/>
-    <dynamics damping="0.0" friction="0.2"/>
-    <limit effort="1000" velocity="5.0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
   </joint>
 
   <joint name="wheel_FL_joint" type="continuous">
@@ -522,8 +522,8 @@
     <child link="wheel_FL_link"/>
     <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
     <axis xyz="0 1 0"/>
-    <dynamics damping="0.0" friction="0.2"/>
-    <limit effort="1000" velocity="5.0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
   </joint>
 
   <joint name="wheel_RL_joint" type="continuous">
@@ -531,8 +531,8 @@
     <child link="wheel_RL_link"/>
     <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
     <axis xyz="0 -1 0"/>
-    <dynamics damping="0.0" friction="0.2"/>
-    <limit effort="1000" velocity="5.0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
   </joint>
 
   <!-- MANIP -->
@@ -630,10 +630,10 @@
   <transmission name="wheel_FR_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="wheel_FR_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="wheel_FR_actuator">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -641,10 +641,10 @@
   <transmission name="wheel_FL_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="wheel_FL_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="wheel_FL_actuator">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -652,10 +652,10 @@
   <transmission name="wheel_RR_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="wheel_RR_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="wheel_RR_actuator">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -663,10 +663,10 @@
   <transmission name="wheel_RL_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="wheel_RL_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="wheel_RL_actuator">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
