@@ -23,26 +23,30 @@
 
   <gazebo reference="wheel_FL_link">
     <material>Gazebo/FlatBlack</material>
-    <mu1>0.2</mu1>
-    <mu2>0.2</mu2>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 
   <gazebo reference="wheel_FR_link">
     <material>Gazebo/FlatBlack</material>
-    <mu1>0.2</mu1>
-    <mu2>0.2</mu2>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 
   <gazebo reference="wheel_RL_link">
     <material>Gazebo/FlatBlack</material>
-    <mu1>0.2</mu1>
-    <mu2>0.2</mu2>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 
   <gazebo reference="wheel_RR_link">
     <material>Gazebo/FlatBlack</material>
-    <mu1>0.2</mu1>
-    <mu2>0.2</mu2>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 
   <gazebo reference="mast_link">
