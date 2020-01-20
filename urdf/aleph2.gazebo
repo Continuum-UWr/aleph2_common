@@ -87,4 +87,28 @@
     <selfCollide>true</selfCollide>
   </gazebo>
 
+  <gazebo reference="manip_base_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
+  <gazebo reference="manip_shoulder_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
+  <gazebo reference="manip_elbow_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
+  <gazebo reference="manip_wrist_tilt_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
+  <gazebo reference="manip_wrist_roll_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
+  <gazebo reference="manip_gripper_joint">
+    <fudgeFactor>0.5</fudgeFactor>
+  </gazebo>
+
 </robot>
