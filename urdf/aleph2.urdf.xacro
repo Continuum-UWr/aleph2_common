@@ -93,7 +93,7 @@
         </geometry>
         <material name="wheel" />
       </visual>
-      <visual>
+      <visual name="piasta">
         <geometry>
           <cylinder radius="0.05" length="0.12"/>
         </geometry>
@@ -102,7 +102,7 @@
           <color rgba="0.5 0.5 0.5 1" />
         </material>
       </visual>
-      <visual>
+      <visual name="walek">
         <geometry>
           <cylinder radius="0.0055" length="0.15"/>
         </geometry>
