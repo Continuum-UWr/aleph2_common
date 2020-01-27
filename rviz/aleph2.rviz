@@ -82,7 +82,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        manip_grasper_link:
+        manip_gripper_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -166,7 +166,7 @@ Visualization Manager:
           Value: true
         manip_elbow_link:
           Value: true
-        manip_grasper_link:
+        manip_gripper_link:
           Value: true
         manip_jaw_L_link:
           Value: true
@@ -203,7 +203,7 @@ Visualization Manager:
             manip_shoulder_link:
               manip_elbow_link:
                 manip_wrist_link:
-                  manip_grasper_link:
+                  manip_gripper_link:
                     manip_effector_tip_link:
                       {}
                     manip_jaw_L_link:
@@ -226,6 +226,27 @@ Visualization Manager:
             {}
       Update Interval: 0
       Value: true
+    - Alpha: 1
+      Class: rviz/Effort
+      Enabled: true
+      History Length: 1
+      Joints:
+        manip_elbow_joint:
+          Value: true
+        manip_shoulder_joint:
+          Value: true
+        manip_wrist_roll_joint:
+          Value: true
+        manip_wrist_tilt_joint:
+          Value: true
+      Name: Effort
+      Robot Description: robot_description
+      Scale: 0.5
+      TF Prefix: ""
+      Topic: /aleph2/joint_states
+      Unreliable: false
+      Value: true
+      Width: 0.019999999552965164
   Enabled: true
   Global Options:
     Background Color: 200; 200; 200

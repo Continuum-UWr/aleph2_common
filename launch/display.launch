@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="gui" default="true" />
+    <arg name="model" default="$(find aleph2_description)/urdf/aleph2.urdf.xacro"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen">
+        <param name="use_gui" value="$(arg gui)" />
+        <param name="publish_default_efforts" value="true" />
+    </node>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+
+    <include file="$(find aleph2_description)/launch/rviz.launch"/>
+
+</launch>
