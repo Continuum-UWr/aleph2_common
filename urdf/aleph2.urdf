@@ -95,270 +95,7 @@
   <material name="mast">
     <color rgba="0.8 0.8 0.8 1"/>
   </material>
-  <link name="base_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/base.STL"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 1.57079632679" xyz="0 0 0"/>
-      <material name="base"/>
-    </visual>
-    <visual>
-      <geometry>
-        <cylinder length="0.12" radius="0.02"/>
-      </geometry>
-      <origin xyz="0.06 0.125 0.063"/>
-      <material name="motor">
-        <color rgba="0 0 0.5 1"/>
-      </material>
-    </visual>
-    <visual>
-      <geometry>
-        <cylinder length="0.1" radius="0.016"/>
-      </geometry>
-      <origin xyz="0.151 0.175 0.053"/>
-      <material name="encoder">
-        <color rgba="0 0.5 0 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.72 0.5 0.1"/>
-      </geometry>
-      <origin xyz="-0.08 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <box size="0.16 0.5 0.1"/>
-      </geometry>
-      <origin xyz="-0.06 0 0.09"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.12" radius="0.02"/>
-      </geometry>
-      <origin xyz="0.06 0.125 0.063"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.1" radius="0.016"/>
-      </geometry>
-      <origin xyz="0.151 0.175 0.053"/>
-    </collision>
-    <inertial>
-      <origin xyz="-0.06700 0.00064 0.00551"/>
-      <mass value="9.0"/>
-      <inertia ixx="0.23691" ixy="-0.00014" ixz="-0.00314" iyy="0.23328" iyz="-0.00054" izz="0.40961"/>
-    </inertial>
-  </link>
-  <link name="rocker_R_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
-      </geometry>
-      <material name="rocker"/>
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/rocker_collision.STL"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 -0.01737 0.03763"/>
-      <mass value="1.5"/>
-      <inertia ixx="0.01934" ixy="-0.00942" ixz="-0.00271" iyy="0.03716" iyz="0.00516" izz="0.04409"/>
-    </inertial>
-  </link>
-  <link name="rocker_L_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
-      </geometry>
-      <material name="rocker"/>
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/rocker_collision.STL"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 -0.01737 0.03763"/>
-      <mass value="1.5"/>
-      <inertia ixx="0.01934" ixy="-0.00942" ixz="-0.00271" iyy="0.03716" iyz="0.00516" izz="0.04409"/>
-    </inertial>
-  </link>
-  <link name="wheel_FR_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
-      </geometry>
-      <material name="wheel"/>
-    </visual>
-    <visual name="piasta">
-      <geometry>
-        <cylinder length="0.12" radius="0.05"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="piasta">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <visual name="walek">
-      <geometry>
-        <cylinder length="0.15" radius="0.0055"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="walek">
-        <color rgba="0.7 0.7 0.7 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.1" radius="0.16"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.15" radius="0.007"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 0.00000 0.00000"/>
-      <mass value="6.0"/>
-      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
-    </inertial>
-  </link>
-  <link name="wheel_RR_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
-      </geometry>
-      <material name="wheel"/>
-    </visual>
-    <visual name="piasta">
-      <geometry>
-        <cylinder length="0.12" radius="0.05"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="piasta">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <visual name="walek">
-      <geometry>
-        <cylinder length="0.15" radius="0.0055"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="walek">
-        <color rgba="0.7 0.7 0.7 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.1" radius="0.16"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.15" radius="0.007"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 0.00000 0.00000"/>
-      <mass value="6.0"/>
-      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
-    </inertial>
-  </link>
-  <link name="wheel_FL_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
-      </geometry>
-      <material name="wheel"/>
-    </visual>
-    <visual name="piasta">
-      <geometry>
-        <cylinder length="0.12" radius="0.05"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="piasta">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <visual name="walek">
-      <geometry>
-        <cylinder length="0.15" radius="0.0055"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="walek">
-        <color rgba="0.7 0.7 0.7 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.1" radius="0.16"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.15" radius="0.007"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 0.00000 0.00000"/>
-      <mass value="6.0"/>
-      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
-    </inertial>
-  </link>
-  <link name="wheel_RL_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
-      </geometry>
-      <material name="wheel"/>
-    </visual>
-    <visual name="piasta">
-      <geometry>
-        <cylinder length="0.12" radius="0.05"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="piasta">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <visual name="walek">
-      <geometry>
-        <cylinder length="0.15" radius="0.0055"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-      <material name="walek">
-        <color rgba="0.7 0.7 0.7 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.1" radius="0.16"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.15" radius="0.007"/>
-      </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
-    </collision>
-    <inertial>
-      <origin xyz="0.00000 0.00000 0.00000"/>
-      <mass value="6.0"/>
-      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
-    </inertial>
-  </link>
+  <!-- LINKS -->
   <link name="manip_base_link">
     <visual>
       <geometry>
@@ -642,93 +379,8 @@
       <inertia ixx="0.00003" ixy="0.00005" ixz="0.00000" iyy="0.00033" iyz="0.00000" izz="0.00033"/>
     </inertial>
   </link>
-  <link name="manip_effector_tip_link"/>
-  <link name="mast_link">
-    <visual>
-      <geometry>
-        <cylinder length="1.3" radius="0.02"/>
-      </geometry>
-      <origin rpi="0 0 0" xyz="0 0 0.65"/>
-      <material name="mast"/>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="1.3" radius="0.03"/>
-      </geometry>
-      <origin rpi="0 0 0" xyz="0 0 0.65"/>
-    </collision>
-    <collision>
-      <geometry>
-        <cylinder length="0.7" radius="0.1"/>
-      </geometry>
-      <origin rpi="0 0 0" xyz="0 0 0.95"/>
-    </collision>
-    <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
-    </inertial>
-  </link>
-  <link name="zed_position">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://aleph2_description/meshes/ZED.stl"/>
-      </geometry>
-      <material name="light_grey">
-        <color rgba="0.8 0.8 0.8 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.035 0.18 0.032"/>
-      </geometry>
-    </collision>
-  </link>
-  <!-- ROCKERS -->
-  <joint name="rocker_R_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="rocker_R_link"/>
-    <origin rpy="1.57079632679 0 3.14159265359" xyz="0 -0.375 0"/>
-  </joint>
-  <joint name="rocker_L_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="rocker_L_link"/>
-    <origin rpy="1.57079632679 0 0" xyz="0 0.375 0"/>
-  </joint>
-  <!-- WHEELS -->
-  <joint name="wheel_FR_joint" type="continuous">
-    <parent link="rocker_R_link"/>
-    <child link="wheel_FR_link"/>
-    <origin rpy="1.57079632679 0 0" xyz="-0.418 -0.226 -0.07"/>
-    <axis xyz="0 1 0"/>
-    <dynamics damping="0.5" friction="0.2"/>
-    <limit effort="20" velocity="25.0"/>
-  </joint>
-  <joint name="wheel_RR_joint" type="continuous">
-    <parent link="rocker_R_link"/>
-    <child link="wheel_RR_link"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0.418 -0.226 -0.07"/>
-    <axis xyz="0 -1 0"/>
-    <dynamics damping="0.5" friction="0.2"/>
-    <limit effort="20" velocity="25.0"/>
-  </joint>
-  <joint name="wheel_FL_joint" type="continuous">
-    <parent link="rocker_L_link"/>
-    <child link="wheel_FL_link"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0.418 -0.226 -0.07"/>
-    <axis xyz="0 1 0"/>
-    <dynamics damping="0.5" friction="0.2"/>
-    <limit effort="20" velocity="25.0"/>
-  </joint>
-  <joint name="wheel_RL_joint" type="continuous">
-    <parent link="rocker_L_link"/>
-    <child link="wheel_RL_link"/>
-    <origin rpy="1.57079632679 0 0" xyz="-0.418 -0.226 -0.07"/>
-    <axis xyz="0 -1 0"/>
-    <dynamics damping="0.5" friction="0.2"/>
-    <limit effort="20" velocity="25.0"/>
-  </joint>
-  <!-- MANIP -->
+  <link name="manip_effector_tip_frame"/>
+  <!-- JOINTS -->
   <joint name="manip_base_joint" type="continuous">
     <parent link="base_link"/>
     <child link="manip_base_link"/>
@@ -788,62 +440,10 @@
   </joint>
   <joint name="manip_effector_tip_joint" type="fixed">
     <parent link="manip_gripper_link"/>
-    <child link="manip_effector_tip_link"/>
+    <child link="manip_effector_tip_frame"/>
     <origin xyz="0.20 0 0"/>
   </joint>
-  <!-- MASZT -->
-  <joint name="mast_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="mast_link"/>
-    <origin xyz="-0.22 0.25 -0.15"/>
-  </joint>
-  <!-- ZED -->
-  <joint name="zed_camera_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="zed_position"/>
-    <origin xyz="0.265 -0.16 0.015"/>
-  </joint>
-  <!-- TRASNMISSIONS -->
-  <transmission name="wheel_FR_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_FR_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_FR_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="wheel_FL_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_FL_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_FL_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="wheel_RR_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_RR_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_RR_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-  <transmission name="wheel_RL_transmission">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_RL_joint">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_RL_actuator">
-      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
+  <!-- TRANSMISSIONS -->
   <transmission name="manip_base_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="manip_base_joint">
@@ -904,12 +504,431 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <!-- <link name="world"/>
-
-  <joint name="fixed" type="fixed">
-    <parent link="world"/>
-    <child link="base_link"/>
-    <origin xyz="0.0 0.0 2.0"/>
-  </joint> -->
+  <!-- LINKS -->
+  <link name="zed_camera_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/ZED.stl"/>
+      </geometry>
+      <material name="light_grey">
+        <color rgba="0.8 0.8 0.8 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.035 0.18 0.032"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="zed_left_camera_frame"/>
+  <link name="zed_left_camera_optical_frame"/>
+  <link name="zed_right_camera_frame"/>
+  <link name="zed_right_camera_optical_frame"/>
+  <!-- JOINTS -->
+  <joint name="zed_camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="zed_camera_link"/>
+    <origin rpy="0 0 0" xyz="0.265 -0.16 0.015"/>
+  </joint>
+  <joint name="zed_left_camera_joint" type="fixed">
+    <parent link="zed_camera_link"/>
+    <child link="zed_left_camera_frame"/>
+    <origin rpy="0 0 0" xyz="0 0.06 0"/>
+  </joint>
+  <joint name="zed_left_camera_optical_joint" type="fixed">
+    <origin rpy="-1.57079632679 0.0 -1.57079632679" xyz="0 0 0"/>
+    <parent link="zed_left_camera_frame"/>
+    <child link="zed_left_camera_optical_frame"/>
+  </joint>
+  <joint name="zed_right_camera_joint" type="fixed">
+    <parent link="zed_camera_link"/>
+    <child link="zed_right_camera_frame"/>
+    <origin rpy="0 0 0" xyz="0 -0.06 0"/>
+  </joint>
+  <joint name="zed_right_camera_optical_joint" type="fixed">
+    <origin rpy="-1.57079632679 0.0 -1.57079632679" xyz="0 0 0"/>
+    <parent link="zed_right_camera_frame"/>
+    <child link="zed_right_camera_optical_frame"/>
+  </joint>
+  <!-- LINKS -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/base.STL"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 1.57079632679" xyz="0 0 0"/>
+      <material name="base"/>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder length="0.12" radius="0.02"/>
+      </geometry>
+      <origin xyz="0.06 0.125 0.063"/>
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.016"/>
+      </geometry>
+      <origin xyz="0.151 0.175 0.053"/>
+      <material name="encoder">
+        <color rgba="0 0.5 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.72 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.08 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.16 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.06 0 0.09"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.12" radius="0.02"/>
+      </geometry>
+      <origin xyz="0.06 0.125 0.063"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.016"/>
+      </geometry>
+      <origin xyz="0.151 0.175 0.053"/>
+    </collision>
+    <inertial>
+      <origin xyz="-0.06700 0.00064 0.00551"/>
+      <mass value="9.0"/>
+      <inertia ixx="0.23691" ixy="-0.00014" ixz="-0.00314" iyy="0.23328" iyz="-0.00054" izz="0.40961"/>
+    </inertial>
+  </link>
+  <link name="rocker_R_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
+      </geometry>
+      <material name="rocker"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/rocker_collision.STL"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 -0.01737 0.03763"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.01934" ixy="-0.00942" ixz="-0.00271" iyy="0.03716" iyz="0.00516" izz="0.04409"/>
+    </inertial>
+  </link>
+  <link name="rocker_L_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
+      </geometry>
+      <material name="rocker"/>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/rocker_collision.STL"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 -0.01737 0.03763"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.01934" ixy="-0.00942" ixz="-0.00271" iyy="0.03716" iyz="0.00516" izz="0.04409"/>
+    </inertial>
+  </link>
+  <link name="wheel_FR_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+    <visual name="piasta">
+      <geometry>
+        <cylinder length="0.12" radius="0.05"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="piasta">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <visual name="walek">
+      <geometry>
+        <cylinder length="0.15" radius="0.0055"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="walek">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.16"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.15" radius="0.007"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000"/>
+      <mass value="6.0"/>
+      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
+    </inertial>
+  </link>
+  <link name="wheel_RR_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+    <visual name="piasta">
+      <geometry>
+        <cylinder length="0.12" radius="0.05"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="piasta">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <visual name="walek">
+      <geometry>
+        <cylinder length="0.15" radius="0.0055"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="walek">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.16"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.15" radius="0.007"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000"/>
+      <mass value="6.0"/>
+      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
+    </inertial>
+  </link>
+  <link name="wheel_FL_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+    <visual name="piasta">
+      <geometry>
+        <cylinder length="0.12" radius="0.05"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="piasta">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <visual name="walek">
+      <geometry>
+        <cylinder length="0.15" radius="0.0055"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="walek">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.16"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.15" radius="0.007"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000"/>
+      <mass value="6.0"/>
+      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
+    </inertial>
+  </link>
+  <link name="wheel_RL_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+      </geometry>
+      <material name="wheel"/>
+    </visual>
+    <visual name="piasta">
+      <geometry>
+        <cylinder length="0.12" radius="0.05"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="piasta">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <visual name="walek">
+      <geometry>
+        <cylinder length="0.15" radius="0.0055"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+      <material name="walek">
+        <color rgba="0.7 0.7 0.7 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.16"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.15" radius="0.007"/>
+      </geometry>
+      <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000"/>
+      <mass value="6.0"/>
+      <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" iyy="0.06495" iyz="0.00000" izz="0.03845"/>
+    </inertial>
+  </link>
+  <link name="mast_link">
+    <visual>
+      <geometry>
+        <cylinder length="1.3" radius="0.02"/>
+      </geometry>
+      <origin rpi="0 0 0" xyz="0 0 0.65"/>
+      <material name="mast"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="1.3" radius="0.03"/>
+      </geometry>
+      <origin rpi="0 0 0" xyz="0 0 0.65"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder length="0.7" radius="0.1"/>
+      </geometry>
+      <origin rpi="0 0 0" xyz="0 0 0.95"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+  <!-- JOINTS -->
+  <joint name="rocker_R_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rocker_R_link"/>
+    <origin rpy="1.57079632679 0 3.14159265359" xyz="0 -0.375 0"/>
+  </joint>
+  <joint name="rocker_L_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rocker_L_link"/>
+    <origin rpy="1.57079632679 0 0" xyz="0 0.375 0"/>
+  </joint>
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="mast_link"/>
+    <origin xyz="-0.22 0.25 -0.15"/>
+  </joint>
+  <joint name="wheel_FR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_FR_link"/>
+    <origin rpy="1.57079632679 0 0" xyz="-0.418 -0.226 -0.07"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+  <joint name="wheel_RR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_RR_link"/>
+    <origin rpy="-1.57079632679 0 0" xyz="0.418 -0.226 -0.07"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+  <joint name="wheel_FL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_FL_link"/>
+    <origin rpy="-1.57079632679 0 0" xyz="0.418 -0.226 -0.07"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+  <joint name="wheel_RL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_RL_link"/>
+    <origin rpy="1.57079632679 0 0" xyz="-0.418 -0.226 -0.07"/>
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+  <!-- TRASNMISSIONS -->
+  <transmission name="wheel_FR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wheel_FL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wheel_RR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wheel_RL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 </robot>
 
