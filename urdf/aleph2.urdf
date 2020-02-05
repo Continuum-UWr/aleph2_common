@@ -429,7 +429,7 @@
     <limit effort="60" lower="-0.033" upper="0" velocity="0.05"/>
     <dynamics damping="5.0" friction="30.0"/>
   </joint>
-  <joint name="manip_gripper_joint_mimic" type="prismatic">
+  <joint name="manip_gripper_mimic_joint" type="prismatic">
     <parent link="manip_gripper_link"/>
     <child link="manip_jaw_R_link"/>
     <origin xyz="0.025 0.03 0"/>
