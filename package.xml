@@ -1,0 +1,24 @@
+<package format="2">
+  <name>aleph2_manip</name>
+  <version>0.0.0</version>
+  <description>aleph2_manip</description>
+  
+  <maintainer email="blazej@todo.todo">blazej</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>pluginlib</depend>
+  <depend>moveit_core</depend>
+  <depend>kdl_parser</depend>
+  <depend>urdf</depend>
+  <depend>srdfdom</depend>
+  <depend>kdl_conversions</depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>moveit_msgs</depend>
+
+</package>
