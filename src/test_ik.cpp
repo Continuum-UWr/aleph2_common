@@ -16,6 +16,8 @@
 #include "kdl/chain.hpp"
 #include "kdl/chainfksolverpos_recursive.hpp"
 #include "kdl_conversions/kdl_msg.h"
+#include "moveit/planning_scene/planning_scene.h"
+#include "moveit/collision_detection/collision_common.h"
 
 void solution_callback(const geometry_msgs::Pose& ik_pose,
                        const std::vector<double>& ik_solution,
@@ -33,6 +35,9 @@ void solution_callback(const geometry_msgs::Pose& ik_pose,
 const std::string CONTROLLERS[] = {"base", "shoulder", "elbow", "wrist_tilt", "wrist_roll"};
 const double OFFSETS[] = {0.0, -1.57079632679, 0.0, 0.0, 0.0};
 
+// const double STATES[] = {0.42, 2.14, 2.22, 0.0, 0.0};
+const double STATES[] = {1.08, 0.98, -1.60, -0.74, 0.0};
+// const double STATES[] = {0.5, 0.0, 0.0, 0.0, 0.0};
 
 int main(int argc, char **argv) 
 {
@@ -42,8 +47,8 @@ int main(int argc, char **argv)
 
     KDL::Tree robot_tree;
     KDL::Chain manip_chain;
-    std::shared_ptr<urdf::Model> urdf_model(new urdf::Model);
-    std::shared_ptr<srdf::Model> srdf_model(new srdf::Model);
+    auto urdf_model = std::make_shared<urdf::Model>();
+    auto srdf_model = std::make_shared<srdf::Model>();
     std::string robot_description;
     std::string robot_description_semantic;
 
@@ -77,10 +82,15 @@ int main(int argc, char **argv)
         ROS_BREAK();
     }
 
-    moveit::core::RobotModel robot_model(
+    auto robot_model = std::make_shared<moveit::core::RobotModel>(
         urdf_model, 
         srdf_model
     );
+
+    planning_scene::PlanningScene planning_scene(robot_model);
+
+
+
 
     if (!robot_tree.getChain("base_link", "efector_tip", manip_chain)) {
         ROS_ERROR("Failed to get manip chain!");
@@ -122,8 +132,23 @@ int main(int argc, char **argv)
         ROS_BREAK();
     }
 
+    robot_state::RobotState& robot_state = planning_scene.getCurrentStateNonConst();
+    const std::vector<std::string>& joint_names = ik_solver->getJointNames();
 
+    for (int i = 0; i < joint_names.size(); ++i)
+        robot_state.setJointPositions(joint_names[i], &STATES[i]);
 
+    collision_detection::CollisionRequest collision_request;
+    // collision_request.group_name = parameters.move_group_name;
+    // collision_request.distance = true;
+    collision_detection::CollisionResult collision_result;
+    collision_result.clear();
+
+    planning_scene.checkSelfCollision(collision_request, collision_result);
+
+    std::cout << collision_result.collision << "\n";
+
+    return 0;
 
 
 
