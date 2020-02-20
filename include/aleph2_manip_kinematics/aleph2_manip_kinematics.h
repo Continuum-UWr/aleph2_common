@@ -25,6 +25,12 @@ namespace aleph2_manip_kinematics
     const std::string CONTROLLERS[] = {"base", "shoulder", "elbow", "wrist_tilt", "wrist_roll"};
     const double OFFSETS[] = {0.0, -1.57079632679, 0.0, 0.0, 0.0};
 
+    enum class KinematicsError
+    {
+        IK_SOLVER_FAILED,
+        SOLUTION_IN_SELF_COLLISION
+    };
+
     class Aleph2ManipKinematics
     {
     public:
@@ -42,7 +48,7 @@ namespace aleph2_manip_kinematics
          * @param pose The pose to move the end-effector to
          * @return true, if the position is reachable, false otherwise
          */
-        bool setPose(geometry_msgs::Pose pose);
+        bool setPose(const geometry_msgs::Pose& pose, KinematicsError& err);
         
         /**
          * get the current end-effector pose
@@ -52,12 +58,20 @@ namespace aleph2_manip_kinematics
         geometry_msgs::Pose getCurrentPose();
     
     private:
+
+        void solutionCallback(const geometry_msgs::Pose& ik_pose,
+                               const std::vector<double>& ik_solution,
+                               moveit_msgs::MoveItErrorCodes& error_code);
+
+
         ros::NodeHandle nh_;
         bool check_collision_;
         std::shared_ptr<pluginlib::ClassLoader<kinematics::KinematicsBase>> ik_solver_loader_;
         boost::shared_ptr<kinematics::KinematicsBase> ik_solver_;
         std::shared_ptr<planning_scene::PlanningScene> planning_scene_;
         robot_state::RobotState* robot_state_;
+        geometry_msgs::Pose current_pose_;
+        std::vector<double> current_joint_states_;
 
         ros::Publisher pos_pubs_[NR_OF_JOINTS];
     };

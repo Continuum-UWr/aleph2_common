@@ -29,14 +29,8 @@ add_library(aleph2_manip_kinematics
     src/aleph2_manip_kinematics)
 
 add_executable(test_ik
-    src/test_ik.cpp)
+    nodes/test_ik.cpp)
 
 target_link_libraries(test_ik
-    ${catkin_LIBRARIES})
-
-add_executable(test_ik1
-    nodes/test_ik1.cpp)
-
-target_link_libraries(test_ik1
     aleph2_manip_kinematics
     ${catkin_LIBRARIES})
