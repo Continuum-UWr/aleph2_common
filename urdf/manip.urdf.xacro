@@ -308,7 +308,7 @@
     <parent link="base_link"/>
     <child link="manip_base_link"/>
     <origin xyz="0.151 0.0035 0.032"/>
-    <axis xyz="0 0 1"/>
+    <axis xyz="0 0 -1"/>
     <limit effort="100" velocity="0.15"/> 
     <dynamics damping="100.0" friction="60.0"/>
   </joint>
@@ -326,7 +326,7 @@
     <parent link="manip_shoulder_link"/>
     <child link="manip_elbow_link"/>
     <origin xyz="0.4 0 0" rpy="${pi} 0 0" />
-    <axis xyz="0 0 -1" />
+    <axis xyz="0 0 1" />
     <limit effort="100" lower="-2.28" upper="2.43" velocity="0.5"/>
     <dynamics damping="100.0" friction="50.0"/>
   </joint>
