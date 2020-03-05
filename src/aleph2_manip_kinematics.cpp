@@ -69,11 +69,12 @@ namespace aleph2_manip_kinematics
                 "/aleph2/manip/controllers/position/" + CONTROLLERS[i] + "/command", 5);
         }
 
+        fake_joint_pub_ = nh_.advertise<sensor_msgs::JointState>("aleph1/fake_joint_states", 10);
+        fake_joint_states_.name = ik_solver_->getJointNames();
     }
 
     bool Aleph2ManipKinematics::setPose(const geometry_msgs::Pose& pose, KinematicsError& err)
     {
-        std::vector<double> seed = {-0.00412247, 0.0648549, 1.01141, -1.07626, 3.14159};
         std::vector<double> solution;
         moveit_msgs::MoveItErrorCodes moveit_error;
         auto callback = std::bind(&Aleph2ManipKinematics::solutionCallback, this, 
@@ -107,6 +108,10 @@ namespace aleph2_manip_kinematics
             pos_pubs_[i].publish(angle);
         }
 
+        fake_joint_states_.header.stamp = ros::Time::now();
+        fake_joint_states_.position = solution;
+        fake_joint_pub_.publish(fake_joint_states_);
+
         current_joint_states_ = solution;
         current_pose_ = pose;
         return true;
@@ -116,9 +121,9 @@ namespace aleph2_manip_kinematics
                           const std::vector<double>& ik_solution,
                           moveit_msgs::MoveItErrorCodes& error_code)
     {
-        const double shoulder_angle = ik_solution[1] + OFFSETS[1];
+        const double elbow_angle = ik_solution[2] + OFFSETS[2];
 
-        if (shoulder_angle < 0.0) {
+        if (elbow_angle > 0.0) {
             error_code.val = error_code.GOAL_CONSTRAINTS_VIOLATED;
             return;
         }

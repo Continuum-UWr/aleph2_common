@@ -11,8 +11,8 @@
 #include "srdfdom/model.h"
 
 #include "geometry_msgs/Pose.h"
+#include "sensor_msgs/JointState.h"
 
-// #include "sensor_msgs/JointState.h"
 // #include "kdl_parser/kdl_parser.hpp"
 // #include "kdl/tree.hpp"
 // #include "kdl/chain.hpp"
@@ -46,6 +46,7 @@ namespace aleph2_manip_kinematics
          * set the pose of the end-effector
          * 
          * @param pose The pose to move the end-effector to
+         * @param err 
          * @return true, if the position is reachable, false otherwise
          */
         bool setPose(const geometry_msgs::Pose& pose, KinematicsError& err);
@@ -72,8 +73,10 @@ namespace aleph2_manip_kinematics
         robot_state::RobotState* robot_state_;
         geometry_msgs::Pose current_pose_;
         std::vector<double> current_joint_states_;
+        sensor_msgs::JointState fake_joint_states_;
 
         ros::Publisher pos_pubs_[NR_OF_JOINTS];
+        ros::Publisher fake_joint_pub_;
     };
 }
 

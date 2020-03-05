@@ -7,15 +7,4 @@
     <group ns="aleph2">
         <param name="robot_description" command="xacro $(find aleph2_description)/urdf/aleph2.urdf.xacro"/>
     </group>
-
-    <node name="aleph1_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
-        <remap from="robot_description" to="aleph1/robot_description"/>
-        <remap from="joint_states" to="aleph1/joint_states"/>
-    </node>
-
-    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen">
-        <remap from="robot_description" to="aleph1/robot_description"/>
-        <remap from="joint_states" to="aleph1/joint_states"/>
-        <param name=""
-    </node> -->
 </launch>
