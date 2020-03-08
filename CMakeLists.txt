@@ -44,3 +44,10 @@ add_executable(test_ik
 target_link_libraries(test_ik
     aleph2_manip_kinematics
     ${catkin_LIBRARIES})
+
+add_executable(manip_kinematics_control_node
+    nodes/manip_kinematics_control_node.cpp)
+
+target_link_libraries(manip_kinematics_control_node
+    aleph2_manip_kinematics
+    ${catkin_LIBRARIES})

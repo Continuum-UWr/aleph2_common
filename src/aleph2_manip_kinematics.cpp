@@ -7,7 +7,7 @@ namespace aleph2_manip_kinematics
 {
     Aleph2ManipKinematics::Aleph2ManipKinematics(bool check_collision)
         : check_collision_(check_collision),
-          current_joint_states_(NR_OF_JOINTS)
+          current_joint_states_(NR_OF_JOINTS+1)
     {
         auto urdf_model = std::make_shared<urdf::Model>();
         auto srdf_model = std::make_shared<srdf::Model>();
@@ -104,7 +104,7 @@ namespace aleph2_manip_kinematics
 
         for (int i = 0; i < NR_OF_JOINTS; ++i) {
             std_msgs::Float64 angle;
-            angle.data = solution[i] + OFFSETS[i];
+            angle.data = solution[i] * SCALE[i] + OFFSETS[i];
             pos_pubs_[i].publish(angle);
         }
 

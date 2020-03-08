@@ -21,9 +21,10 @@
 
 namespace aleph2_manip_kinematics
 {
-    const int NR_OF_JOINTS = 5;
-    const std::string CONTROLLERS[] = {"base", "shoulder", "elbow", "wrist_tilt", "wrist_roll"};
-    const double OFFSETS[] = {0.0, -1.57079632679, 0.0, 0.0, 0.0};
+    const int NR_OF_JOINTS = 4;
+    const std::string CONTROLLERS[] = {"base", "shoulder", "elbow", "wrist_tilt"};
+    const double OFFSETS[] = {0.0, -1.57079632679, 0.0, 0.0};
+    const double SCALE[] = {1.0, 1.0, -1.0, 1.0};
 
     enum class KinematicsError
     {

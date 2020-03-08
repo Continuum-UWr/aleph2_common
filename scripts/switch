@@ -25,7 +25,7 @@ req.start_controllers = [
     "manip/controllers/position/shoulder",
     "manip/controllers/position/elbow",
     "manip/controllers/position/wrist_tilt",
-    "manip/controllers/position/wrist_roll"
+    "manip/controllers/velocity/wrist_roll"
 ]
 
 req.strictness = req.STRICT
