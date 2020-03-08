@@ -6,7 +6,16 @@ find_package(catkin REQUIRED COMPONENTS
     moveit_core
     pluginlib
     kdl_parser
-    kdl_conversions)
+    kdl_conversions
+    message_generation    
+)
+
+add_message_files(
+  FILES
+  KinematicsCommand.msg
+)
+
+generate_messages()
 
 catkin_package(
     CATKIN_DEPENDS 
@@ -19,6 +28,7 @@ catkin_package(
         moveit_msgs
         kdl_parser
         kdl_conversions
+        message_runtime
 )
 
 include_directories(
