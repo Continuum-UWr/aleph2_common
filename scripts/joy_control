@@ -13,6 +13,7 @@ def joy_callback(msg):
     cmd.ee_x_cmd = -msg.axes[1] * 0.1
     cmd.ee_y_cmd = -msg.axes[0] * 0.1
     cmd.ee_z_cmd = (msg.axes[5] - msg.axes[2]) * 0.1
+    cmd.ee_pitch_cmd = msg.axes[4]* 1.0
     control_pub.publish(cmd)
 
 joy_sub = rospy.Subscriber("/input/Microsoft_X_Box_360_pad_0_blazej_pc", InputMessage, joy_callback, queue_size=5)

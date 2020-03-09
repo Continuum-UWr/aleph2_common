@@ -8,7 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
     kdl_parser
     kdl_conversions
     message_generation  
-    tf2_ros  
+    tf2_ros
+    tf2_geometry_msgs
 )
 
 add_message_files(
@@ -32,6 +33,7 @@ catkin_package(
         kdl_conversions
         message_runtime
         tf2_ros
+        tf2_geometry_msgs
 )
 
 include_directories(

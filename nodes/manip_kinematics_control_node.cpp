@@ -3,6 +3,7 @@
 
 #include "std_srvs/Empty.h"
 #include "geometry_msgs/PoseStamped.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
 geometry_msgs::Pose pose;
 aleph2_manip::KinematicsCommand cmd;
@@ -76,9 +77,23 @@ int main(int argc, char **argv)
 
             float duration = (current_time - last_update).toSec();
 
+            // Apply linear translation
             new_pose.position.x += cmd.ee_x_cmd * duration;
             new_pose.position.y += cmd.ee_y_cmd * duration;
             new_pose.position.z += cmd.ee_z_cmd * duration;
+
+            // Apply pitch rotation
+            tf2::Quaternion q_orig, q_rot, q_new;
+            tf2::convert(new_pose.orientation, q_orig);
+
+            double pitch_rot = cmd.ee_pitch_cmd * duration;
+            q_rot.setRPY(0, pitch_rot, 0);
+
+            q_new = q_rot * q_orig;
+            q_new.normalize();
+
+            tf2::convert(q_new, new_pose.orientation);
+
 
             if (!manip_kinematics->setPose(new_pose, error))
             {
