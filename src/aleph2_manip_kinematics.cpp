@@ -1,13 +1,16 @@
 #include "aleph2_manip_kinematics/aleph2_manip_kinematics.h"
 
 #include "std_msgs/Float64.h"
+#include "geometry_msgs/TransformStamped.h"
+
 #include "moveit/robot_model/robot_model.h"
 
 namespace aleph2_manip_kinematics
 {
     Aleph2ManipKinematics::Aleph2ManipKinematics(bool check_collision)
         : check_collision_(check_collision),
-          current_joint_states_(NR_OF_JOINTS+1)
+          current_joint_states_(NR_OF_JOINTS+1),
+          tf_listener_(tf_buffer_)
     {
         auto urdf_model = std::make_shared<urdf::Model>();
         auto srdf_model = std::make_shared<srdf::Model>();
@@ -131,8 +134,21 @@ namespace aleph2_manip_kinematics
         error_code.val = error_code.SUCCESS;
     }
 
-    geometry_msgs::Pose Aleph2ManipKinematics::getCurrentPose()
+    bool Aleph2ManipKinematics::getCurrentPose(geometry_msgs::Pose &pose)
     {
-        return current_pose_;
+        geometry_msgs::TransformStamped transform;
+
+        try {
+            transform = tf_buffer_.lookupTransform("base_link", "efector_tip", ros::Time(0));
+        } catch (tf2::LookupException &ex) {
+            return false;
+        }
+
+        pose.position.x = transform.transform.translation.x;
+        pose.position.y = transform.transform.translation.y;
+        pose.position.z = transform.transform.translation.z;
+        pose.orientation = transform.transform.rotation;
+
+        return true;
     }
 }

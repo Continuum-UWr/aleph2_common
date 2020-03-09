@@ -7,7 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
     pluginlib
     kdl_parser
     kdl_conversions
-    message_generation    
+    message_generation  
+    tf2_ros  
 )
 
 add_message_files(
@@ -26,9 +27,11 @@ catkin_package(
         sensor_msgs 
         geometry_msgs 
         moveit_msgs
+        std_srvs
         kdl_parser
         kdl_conversions
         message_runtime
+        tf2_ros
 )
 
 include_directories(

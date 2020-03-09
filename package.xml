@@ -16,10 +16,12 @@
   <depend>urdf</depend>
   <depend>srdfdom</depend>
   <depend>kdl_conversions</depend>
+  <depend>tf2_ros</depend>
 
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>moveit_msgs</depend>
+  <depend>std_srvs</depend>
 
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>

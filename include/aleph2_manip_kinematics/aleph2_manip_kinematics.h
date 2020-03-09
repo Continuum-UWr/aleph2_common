@@ -9,6 +9,7 @@
 #include "moveit_msgs/MoveItErrorCodes.h"
 #include "urdf/model.h"
 #include "srdfdom/model.h"
+#include "tf2_ros/transform_listener.h"
 
 #include "geometry_msgs/Pose.h"
 #include "sensor_msgs/JointState.h"
@@ -47,17 +48,18 @@ namespace aleph2_manip_kinematics
          * set the pose of the end-effector
          * 
          * @param pose The pose to move the end-effector to
-         * @param err 
-         * @return true, if the position is reachable, false otherwise
+         * @param err An error code that encodes the reason for failure
+         * @return true, if the position was set successfully, false otherwise
          */
         bool setPose(const geometry_msgs::Pose& pose, KinematicsError& err);
         
         /**
-         * get the current end-effector pose
+         * get the current pose of the end-effector tip
          * 
-         * @return the current pose of the end-effector
+         * @param pose The pose of the end-effector tip
+         * @return true, if the position was retrieved successfully, false otherwise
          */
-        geometry_msgs::Pose getCurrentPose();
+        bool getCurrentPose(geometry_msgs::Pose& pose);
     
     private:
 
@@ -78,6 +80,9 @@ namespace aleph2_manip_kinematics
 
         ros::Publisher pos_pubs_[NR_OF_JOINTS];
         ros::Publisher fake_joint_pub_;
+
+        tf2_ros::Buffer tf_buffer_;
+        tf2_ros::TransformListener tf_listener_;
     };
 }
 
