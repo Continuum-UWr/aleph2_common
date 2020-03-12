@@ -14,11 +14,9 @@
 #include "geometry_msgs/Pose.h"
 #include "sensor_msgs/JointState.h"
 
-// #include "kdl_parser/kdl_parser.hpp"
-// #include "kdl/tree.hpp"
-// #include "kdl/chain.hpp"
-// #include "kdl/chainfksolverpos_recursive.hpp"
-// #include "kdl_conversions/kdl_msg.h"
+#include "kdl/tree.hpp"
+#include "kdl/chainfksolver.hpp"
+
 
 namespace aleph2_manip_kinematics
 {
@@ -26,6 +24,7 @@ namespace aleph2_manip_kinematics
     const std::string CONTROLLERS[] = {"base", "shoulder", "elbow", "wrist_tilt"};
     const double OFFSETS[] = {0.0, -1.57079632679, 0.0, 0.0};
     const double SCALE[] = {1.0, 1.0, -1.0, 1.0};
+    const double ANGLE_TOLERANCE = 0.001;
 
     enum class KinematicsError
     {
@@ -64,23 +63,35 @@ namespace aleph2_manip_kinematics
     private:
 
         void solutionCallback(const geometry_msgs::Pose& ik_pose,
-                               const std::vector<double>& ik_solution,
-                               moveit_msgs::MoveItErrorCodes& error_code);
+                              const std::vector<double>& ik_solution,
+                              moveit_msgs::MoveItErrorCodes& error_code);
+
+        bool getFKPose(const std::vector<double>& joint_pos, geometry_msgs::Pose& pose);
 
 
-        ros::NodeHandle nh_;
+        // configuration
         bool check_collision_;
+
+        // solvers
         std::shared_ptr<pluginlib::ClassLoader<kinematics::KinematicsBase>> ik_solver_loader_;
         boost::shared_ptr<kinematics::KinematicsBase> ik_solver_;
         std::shared_ptr<planning_scene::PlanningScene> planning_scene_;
+        std::shared_ptr<KDL::ChainFkSolverPos> fk_solver_;
+
+        // memory
         robot_state::RobotState* robot_state_;
         geometry_msgs::Pose current_pose_;
         std::vector<double> current_joint_states_;
         sensor_msgs::JointState fake_joint_states_;
+        KDL::Tree robot_tree_;
+        KDL::Chain manip_chain_;
 
+        // ROS stuff
+        ros::NodeHandle nh_;
         ros::Publisher pos_pubs_[NR_OF_JOINTS];
         ros::Publisher fake_joint_pub_;
 
+        // TF stuff
         tf2_ros::Buffer tf_buffer_;
         tf2_ros::TransformListener tf_listener_;
     };

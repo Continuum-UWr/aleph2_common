@@ -4,6 +4,10 @@
 #include "geometry_msgs/TransformStamped.h"
 
 #include "moveit/robot_model/robot_model.h"
+#include "kdl_parser/kdl_parser.hpp"
+#include "kdl/chainfksolverpos_recursive.hpp"
+#include "kdl_conversions/kdl_msg.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
 namespace aleph2_manip_kinematics
 {
@@ -17,26 +21,35 @@ namespace aleph2_manip_kinematics
         std::string robot_description;
         std::string robot_description_semantic;
         std::vector<std::string> tip_frames = {"efector_tip"};
-        // KDL::Tree robot_tree;
 
         // Load robot model
         if (!nh_.param("aleph1/robot_description", robot_description, std::string())) {
-            ROS_ERROR("Failed to retrieve the robot description from parameter server!");
+            ROS_FATAL("Failed to retrieve the robot description from parameter server!");
             ROS_BREAK();
         }
         
         if (!nh_.param("aleph1/robot_description_semantic", robot_description_semantic, std::string())) {
-            ROS_ERROR("Failed to retrieve the semantic robot description from parameter server!");
+            ROS_FATAL("Failed to retrieve the semantic robot description from parameter server!");
             ROS_BREAK();
         }
 
         if (!urdf_model->initString(robot_description)) {
-            ROS_ERROR("Failed to create urdf model object");
+            ROS_FATAL("Failed to create urdf model object");
             ROS_BREAK();
         }
 
         if (!srdf_model->initString(*urdf_model, robot_description_semantic)) {
-            ROS_ERROR("Failed to create srdf model object");
+            ROS_FATAL("Failed to create srdf model object");
+            ROS_BREAK();
+        }
+
+        if (!kdl_parser::treeFromUrdfModel(*urdf_model, robot_tree_)) {
+            ROS_FATAL("Failed to construct the KDL tree");
+            ROS_BREAK();
+        }
+
+        if (!robot_tree_.getChain("base_link", "efector_tip", manip_chain_)) {
+            ROS_FATAL("Failed to get the manip chain from the KDL tree");
             ROS_BREAK();
         }
 
@@ -61,10 +74,14 @@ namespace aleph2_manip_kinematics
             ROS_BREAK();
         } 
 
+        // Initialize the IK solver
         if (!ik_solver_->initialize("aleph1/robot_description", "manip", "base_link", tip_frames, 5)){
             ROS_ERROR("The kinematics solver failed to initialize!");
             ROS_BREAK();
         }
+
+        // Initialize the FK solver
+        fk_solver_ = std::make_shared<KDL::ChainFkSolverPos_recursive>(manip_chain_);
 
         // advertise the position command topics
         for (int i = 0; i < NR_OF_JOINTS; ++i) {
@@ -126,10 +143,35 @@ namespace aleph2_manip_kinematics
     {
         const double elbow_angle = ik_solution[2] + OFFSETS[2];
 
+        // Check the angle on the elbow joint
         if (elbow_angle > 0.0) {
-            error_code.val = error_code.GOAL_CONSTRAINTS_VIOLATED;
+            error_code.val = error_code.FAILURE;
             return;
         }
+
+        // Get the FK pose
+        geometry_msgs::Pose fk_pose;
+        if (!getFKPose(ik_solution, fk_pose)) {
+            error_code.val = error_code.FAILURE;
+            return;
+        }
+
+        // Get the angle between FK and IK poses
+        tf2::Quaternion fk_quat, ik_quat, rot_quat;
+        tf2::convert(fk_pose.orientation, fk_quat);
+        tf2::convert(ik_pose.orientation, ik_quat);
+        rot_quat = fk_quat * ik_quat.inverse();
+        double angle = rot_quat.getAngle();
+
+        // Check if the angle is tolerable
+        if (angle > ANGLE_TOLERANCE) {
+            error_code.val = error_code.FAILURE;
+            return;
+        }
+
+        // std::cout << "ik_pose: " << std::endl << ik_pose << std::endl;
+        // std::cout << "fk_pose: " << std::endl << fk_pose << std::endl;
+        // std::cout << "angle: " << angle << std::endl;
 
         error_code.val = error_code.SUCCESS;
     }
@@ -140,6 +182,7 @@ namespace aleph2_manip_kinematics
 
         try {
             transform = tf_buffer_.lookupTransform("base_link", "efector_tip", ros::Time(0));
+            std::cout << transform << std::endl;
         } catch (tf2::LookupException &ex) {
             return false;
         }
@@ -149,6 +192,22 @@ namespace aleph2_manip_kinematics
         pose.position.z = transform.transform.translation.z;
         pose.orientation = transform.transform.rotation;
 
+        return true;
+    }
+
+    bool Aleph2ManipKinematics::getFKPose(const std::vector<double>& joint_pos, geometry_msgs::Pose& pose)
+    {
+        KDL::JntArray joint_pos_kdl(5);
+        for (int i = 0; i < 5; ++i)
+            joint_pos_kdl(i) = joint_pos[i];
+
+        KDL::Frame pose_kdl;
+        if (fk_solver_->JntToCart(joint_pos_kdl, pose_kdl) < 0) {
+            ROS_FATAL("FK solver failed to find the position of the end-effector");
+            return false;
+        }
+
+        tf::poseKDLToMsg(pose_kdl, pose);
         return true;
     }
 }
