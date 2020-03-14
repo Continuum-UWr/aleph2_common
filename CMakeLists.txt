@@ -43,13 +43,6 @@ include_directories(
 add_library(aleph2_manip_kinematics
     src/aleph2_manip_kinematics)
 
-add_executable(test_ik
-    nodes/test_ik.cpp)
-
-target_link_libraries(test_ik
-    aleph2_manip_kinematics
-    ${catkin_LIBRARIES})
-
 add_executable(manip_kinematics_control_node
     nodes/manip_kinematics_control_node.cpp)
 

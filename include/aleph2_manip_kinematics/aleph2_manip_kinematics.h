@@ -12,6 +12,7 @@
 #include "tf2_ros/transform_listener.h"
 
 #include "geometry_msgs/Pose.h"
+#include "geometry_msgs/TransformStamped.h"
 #include "sensor_msgs/JointState.h"
 
 #include "kdl/tree.hpp"
@@ -29,7 +30,8 @@ namespace aleph2_manip_kinematics
     enum class KinematicsError
     {
         IK_SOLVER_FAILED,
-        SOLUTION_IN_SELF_COLLISION
+        SOLUTION_IN_SELF_COLLISION,
+        FK_SOLVER_FAILED
     };
 
     class Aleph2ManipKinematics
@@ -44,16 +46,35 @@ namespace aleph2_manip_kinematics
         Aleph2ManipKinematics(bool check_collision = true);
 
         /**
-         * set the pose of the end-effector
-         * 
+         * @brief set the pose of the end-effector
          * @param pose The pose to move the end-effector to
+         * @param result_pose The actual pose of the end-effector returned
+         * by the forward kinematics solver. If the function failed, it is the 
+         * last correct pose
          * @param err An error code that encodes the reason for failure
          * @return true, if the position was set successfully, false otherwise
          */
-        bool setPose(const geometry_msgs::Pose& pose, KinematicsError& err);
+        bool setPose(const geometry_msgs::Pose& pose, 
+                     geometry_msgs::Pose& result_pose,
+                     KinematicsError& err);
         
         /**
-         * get the current pose of the end-effector tip
+         * @brief set the pose of the end-effector
+         * @param position The position to move the end-effector to
+         * @param pitch The pitch angle of the end-effector pose
+         * @param result_pose The actual pose of the end-effector returned
+         * by the forward kinematics solver. If the function failed, it is the 
+         * last correct pose
+         * @param err An error code that encodes the reason for failure
+         * @return true, if the position was set successfully, false otherwise
+         */
+        bool setPose(const geometry_msgs::Point& position, 
+                     const double& pitch, 
+                     geometry_msgs::Pose& result_pose,
+                     KinematicsError& err);
+        
+        /**
+         * get the current pose of the end-effector tip published on TF
          * 
          * @param pose The pose of the end-effector tip
          * @return true, if the position was retrieved successfully, false otherwise
@@ -94,6 +115,7 @@ namespace aleph2_manip_kinematics
         // TF stuff
         tf2_ros::Buffer tf_buffer_;
         tf2_ros::TransformListener tf_listener_;
+        geometry_msgs::TransformStamped manip_transform_;
     };
 }
 

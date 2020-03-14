@@ -73,29 +73,27 @@ int main(int argc, char **argv)
 
         if (active){ 
 
-            geometry_msgs::Pose new_pose = pose;
-
             float duration = (current_time - last_update).toSec();
 
             // Apply linear translation
-            new_pose.position.x += cmd.ee_x_cmd * duration;
-            new_pose.position.y += cmd.ee_y_cmd * duration;
-            new_pose.position.z += cmd.ee_z_cmd * duration;
+            pose.position.x += cmd.ee_x_cmd * duration;
+            pose.position.y += cmd.ee_y_cmd * duration;
+            pose.position.z += cmd.ee_z_cmd * duration;
 
             // Apply pitch rotation
             tf2::Quaternion q_orig, q_rot, q_new;
-            tf2::convert(new_pose.orientation, q_orig);
+            tf2::convert(pose.orientation, q_orig);
 
             double pitch_rot = cmd.ee_pitch_cmd * duration;
             q_rot.setRPY(0, pitch_rot, 0);
 
-            q_new = q_rot * q_orig;
+            q_new = q_orig * q_rot;
             q_new.normalize();
 
-            tf2::convert(q_new, new_pose.orientation);
+            tf2::convert(q_new, pose.orientation);
 
 
-            if (!manip_kinematics->setPose(new_pose, error))
+            if (!manip_kinematics->setPose(pose, pose, error))
             {
                 switch(error)
                 {
@@ -111,8 +109,6 @@ int main(int argc, char **argv)
             }
             else
             {
-                pose = new_pose;
-
                 pose_stamped.header.stamp = ros::Time::now();
                 pose_stamped.header.frame_id = "base_link";
                 pose_stamped.pose = pose;

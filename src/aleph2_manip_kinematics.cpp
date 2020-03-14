@@ -43,6 +43,12 @@ namespace aleph2_manip_kinematics
             ROS_BREAK();
         }
 
+        auto robot_model = std::make_shared<moveit::core::RobotModel>(
+            urdf_model, 
+            srdf_model
+        );
+
+        // Get the KDL robot tree and chain for the manipulator
         if (!kdl_parser::treeFromUrdfModel(*urdf_model, robot_tree_)) {
             ROS_FATAL("Failed to construct the KDL tree");
             ROS_BREAK();
@@ -53,12 +59,7 @@ namespace aleph2_manip_kinematics
             ROS_BREAK();
         }
 
-        auto robot_model = std::make_shared<moveit::core::RobotModel>(
-            urdf_model, 
-            srdf_model
-        );
-
-        // Initialize planning scene
+        // Initialize the planning scene
         planning_scene_ = std::make_shared<planning_scene::PlanningScene>(robot_model);
         robot_state_ = &planning_scene_->getCurrentStateNonConst();
 
@@ -70,13 +71,13 @@ namespace aleph2_manip_kinematics
             ik_solver_ = ik_solver_loader_->createInstance("aleph_manip_kinematics/IKFastKinematicsPlugin"); 
         }
         catch(pluginlib::PluginlibException& ex) {
-            ROS_ERROR("The kinematics plugin failed to load. Error: %s", ex.what());
+            ROS_FATAL("The kinematics plugin failed to load. Error: %s", ex.what());
             ROS_BREAK();
         } 
 
         // Initialize the IK solver
         if (!ik_solver_->initialize("aleph1/robot_description", "manip", "base_link", tip_frames, 5)){
-            ROS_ERROR("The kinematics solver failed to initialize!");
+            ROS_FATAL("The kinematics solver failed to initialize!");
             ROS_BREAK();
         }
 
@@ -89,22 +90,37 @@ namespace aleph2_manip_kinematics
                 "/aleph2/manip/controllers/position/" + CONTROLLERS[i] + "/command", 5);
         }
 
+        // advertise the fake joint states topic
         fake_joint_pub_ = nh_.advertise<sensor_msgs::JointState>("aleph1/fake_joint_states", 10);
         fake_joint_states_.name = ik_solver_->getJointNames();
+
+        // Get the transform to manip's base link
+        try {
+            manip_transform_ = tf_buffer_.lookupTransform("base_link", "manip_base", ros::Time(0), 
+                ros::Duration(10.0));
+        } catch (tf2::LookupException &ex) {
+            ROS_FATAL_STREAM("Failed to get the transform to manip_base link: " << ex.what());
+            ROS_BREAK();
+        }
     }
 
-    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Pose& pose, KinematicsError& err)
+    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Pose& pose, 
+                                        geometry_msgs::Pose& result_pose,
+                                        KinematicsError& err)
     {
         std::vector<double> solution;
         moveit_msgs::MoveItErrorCodes moveit_error;
         auto callback = std::bind(&Aleph2ManipKinematics::solutionCallback, this, 
             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
+        // Search for the inverse kinematics solution
         if (!ik_solver_->searchPositionIK(pose, current_joint_states_, 0.001, solution, callback, moveit_error)) {
             err = KinematicsError::IK_SOLVER_FAILED;
+            result_pose = current_pose_;
             return false;
         }
 
+        // Check for self-collision
         if (check_collision_) {
             const std::vector<std::string>& joint_names = ik_solver_->getJointNames();
 
@@ -118,22 +134,51 @@ namespace aleph2_manip_kinematics
 
             if (collision_result.collision){
                 err = KinematicsError::SOLUTION_IN_SELF_COLLISION;
+                result_pose = current_pose_;
                 return false;
             }
         }
 
+        // Get the actual pose of the end-effector for the solution
+        if (!getFKPose(solution, current_pose_)) {
+            err = KinematicsError::FK_SOLVER_FAILED;
+            return false;
+        }
+
+        current_joint_states_ = solution;
+        result_pose = current_pose_;
+
+        // Publish joint position commands
         for (int i = 0; i < NR_OF_JOINTS; ++i) {
             std_msgs::Float64 angle;
             angle.data = solution[i] * SCALE[i] + OFFSETS[i];
             pos_pubs_[i].publish(angle);
         }
 
+        // Publish fake joint states
         fake_joint_states_.header.stamp = ros::Time::now();
         fake_joint_states_.position = solution;
         fake_joint_pub_.publish(fake_joint_states_);
 
-        current_joint_states_ = solution;
-        current_pose_ = pose;
+        return true;
+    }
+
+    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Point& position, 
+                                        const double& pitch, 
+                                        geometry_msgs::Pose& result_pose,
+                                        KinematicsError& err)
+    {
+        geometry_msgs::Pose pose;
+        pose.position = position;
+
+        
+        // pose.orientation = current_pose_.orientation;
+
+        tf2::doTransform(pose, pose, manip_transform_);
+
+        std::cout << pose << std::endl;
+
+        // return setPose(pose, result_pose, err);
         return true;
     }
 
@@ -161,17 +206,17 @@ namespace aleph2_manip_kinematics
         tf2::convert(fk_pose.orientation, fk_quat);
         tf2::convert(ik_pose.orientation, ik_quat);
         rot_quat = fk_quat * ik_quat.inverse();
-        double angle = rot_quat.getAngle();
+        double angle = rot_quat.getAngleShortestPath();
+
+        // std::cout << "ik_pose: " << std::endl << ik_pose << std::endl;
+        // std::cout << "fk_pose: " << std::endl << fk_pose << std::endl;
+        // std::cout << "angle: " << angle << std::endl;
 
         // Check if the angle is tolerable
         if (angle > ANGLE_TOLERANCE) {
             error_code.val = error_code.FAILURE;
             return;
         }
-
-        // std::cout << "ik_pose: " << std::endl << ik_pose << std::endl;
-        // std::cout << "fk_pose: " << std::endl << fk_pose << std::endl;
-        // std::cout << "angle: " << angle << std::endl;
 
         error_code.val = error_code.SUCCESS;
     }
@@ -182,7 +227,7 @@ namespace aleph2_manip_kinematics
 
         try {
             transform = tf_buffer_.lookupTransform("base_link", "efector_tip", ros::Time(0));
-            std::cout << transform << std::endl;
+            // std::cout << transform << std::endl;
         } catch (tf2::LookupException &ex) {
             return false;
         }
