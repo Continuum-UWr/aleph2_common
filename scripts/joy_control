@@ -10,9 +10,9 @@ control_pub = rospy.Publisher("aleph2/manip/kinematics/command", KinematicsComma
 
 def joy_callback(msg):
     cmd = KinematicsCommand()
-    cmd.ee_x_cmd = -msg.axes[1] * 0.1
-    cmd.ee_y_cmd = -msg.axes[0] * 0.1
-    cmd.ee_z_cmd = (msg.axes[5] - msg.axes[2]) * 0.1
+    cmd.ee_tip_x_cmd = -msg.axes[1] * 0.1
+    cmd.ee_tip_y_cmd = -msg.axes[0] * 0.1
+    cmd.ee_tip_z_cmd = (msg.axes[5] - msg.axes[2]) * 0.1
     cmd.ee_pitch_cmd = msg.axes[4]* 1.0
     control_pub.publish(cmd)
 

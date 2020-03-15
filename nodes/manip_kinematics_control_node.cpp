@@ -89,6 +89,22 @@ int main(int argc, char **argv)
             // Apply pitch rotation
             new_ee_pitch += cmd.ee_pitch_cmd * duration;
 
+            // Get the translation in tip's frame
+            geometry_msgs::Vector3 ee_tip_vector;
+            ee_tip_vector.x = cmd.ee_tip_x_cmd * duration;
+            ee_tip_vector.y = cmd.ee_tip_y_cmd * duration,
+            ee_tip_vector.z = cmd.ee_tip_z_cmd * duration;
+
+            // Rotate the vector
+            geometry_msgs::TransformStamped rot_transform;
+            rot_transform.transform.rotation = ee_pose.orientation;
+            tf2::doTransform(ee_tip_vector, ee_tip_vector, rot_transform);
+
+            // Apply the translation
+            new_ee_position.x += ee_tip_vector.x;
+            new_ee_position.y += ee_tip_vector.y;
+            new_ee_position.z += ee_tip_vector.z;
+
             if (!manip_kinematics->setPose(new_ee_position, new_ee_pitch, ee_pose, error))
             {
                 switch(error)
