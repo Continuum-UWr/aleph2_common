@@ -5,7 +5,9 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 
-geometry_msgs::Pose pose;
+geometry_msgs::Pose ee_pose;
+geometry_msgs::Point ee_position;
+double ee_pitch;
 aleph2_manip::KinematicsCommand cmd;
 aleph2_manip_kinematics::Aleph2ManipKinematics *manip_kinematics;
 aleph2_manip_kinematics::KinematicsError error;
@@ -19,10 +21,11 @@ void command_callback(const aleph2_manip::KinematicsCommandConstPtr& msg)
 bool activate_callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
     if (!active) {
-        if (!manip_kinematics->getCurrentPose(pose)) {
+        if (!manip_kinematics->getCurrentPose(ee_pose) || !manip_kinematics->getCurrentPitch(ee_pitch)) {
             ROS_ERROR("Failed to retrieve the current pose of the end-effector!");
             return false;
         }
+        ee_position = ee_pose.position;
         cmd = aleph2_manip::KinematicsCommand();
         active = true;
         ROS_INFO("Kinematics control activated");
@@ -51,7 +54,7 @@ int main(int argc, char **argv)
     ros::NodeHandle pnh("~");
 
     int loop_rate;
-    geometry_msgs::PoseStamped pose_stamped;
+    geometry_msgs::PoseStamped pose_msg;
 
     pnh.param("loop_rate", loop_rate, 30);
     
@@ -73,27 +76,20 @@ int main(int argc, char **argv)
 
         if (active){ 
 
-            float duration = (current_time - last_update).toSec();
+            double duration = (current_time - last_update).toSec();
+
+            geometry_msgs::Point new_ee_position = ee_position;
+            double new_ee_pitch = ee_pitch;
 
             // Apply linear translation
-            pose.position.x += cmd.ee_x_cmd * duration;
-            pose.position.y += cmd.ee_y_cmd * duration;
-            pose.position.z += cmd.ee_z_cmd * duration;
+            new_ee_position.x += cmd.ee_x_cmd * duration;
+            new_ee_position.y += cmd.ee_y_cmd * duration;
+            new_ee_position.z += cmd.ee_z_cmd * duration;
 
             // Apply pitch rotation
-            tf2::Quaternion q_orig, q_rot, q_new;
-            tf2::convert(pose.orientation, q_orig);
+            new_ee_pitch += cmd.ee_pitch_cmd * duration;
 
-            double pitch_rot = cmd.ee_pitch_cmd * duration;
-            q_rot.setRPY(0, pitch_rot, 0);
-
-            q_new = q_orig * q_rot;
-            q_new.normalize();
-
-            tf2::convert(q_new, pose.orientation);
-
-
-            if (!manip_kinematics->setPose(pose, pose, error))
+            if (!manip_kinematics->setPose(new_ee_position, new_ee_pitch, ee_pose, error))
             {
                 switch(error)
                 {
@@ -107,14 +103,16 @@ int main(int argc, char **argv)
                         ROS_ERROR_STREAM("Unknown error! Error code: " << static_cast<int>(error));
                 }
             }
-            else
+            else 
             {
-                pose_stamped.header.stamp = ros::Time::now();
-                pose_stamped.header.frame_id = "base_link";
-                pose_stamped.pose = pose;
-                pose_pub.publish(pose_stamped);
-            }
+                ee_position = new_ee_position;
+                ee_pitch = new_ee_pitch;
 
+                pose_msg.header.stamp = ros::Time::now();
+                pose_msg.header.frame_id = "base_link";
+                pose_msg.pose = ee_pose;
+                pose_pub.publish(pose_msg);
+            }
         }
 
         last_update = current_time;

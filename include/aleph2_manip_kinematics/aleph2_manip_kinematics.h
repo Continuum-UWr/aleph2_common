@@ -80,6 +80,14 @@ namespace aleph2_manip_kinematics
          * @return true, if the position was retrieved successfully, false otherwise
          */
         bool getCurrentPose(geometry_msgs::Pose& pose);
+
+        /**
+         * get the current pitch angle of the end-effector tip published on TF
+         * 
+         * @param pitch The pitch angle of the end-effector tip
+         * @return true, if the position was retrieved successfully, false otherwise
+         */
+        bool getCurrentPitch(double& pitch);
     
     private:
 

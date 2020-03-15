@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "aleph2_manip_kinematics/aleph2_manip_kinematics.h"
 
 #include "std_msgs/Float64.h"
@@ -96,7 +98,7 @@ namespace aleph2_manip_kinematics
 
         // Get the transform to manip's base link
         try {
-            manip_transform_ = tf_buffer_.lookupTransform("base_link", "manip_base", ros::Time(0), 
+            manip_transform_ = tf_buffer_.lookupTransform("manip_base", "base_link", ros::Time(0), 
                 ros::Duration(10.0));
         } catch (tf2::LookupException &ex) {
             ROS_FATAL_STREAM("Failed to get the transform to manip_base link: " << ex.what());
@@ -171,15 +173,31 @@ namespace aleph2_manip_kinematics
         geometry_msgs::Pose pose;
         pose.position = position;
 
-        
-        // pose.orientation = current_pose_.orientation;
+        // Get the position in manip's base frame
+        geometry_msgs::Point manip_point;
+        tf2::doTransform(pose.position, manip_point, manip_transform_);
 
-        tf2::doTransform(pose, pose, manip_transform_);
+        // Calculate the Z angle 
+        tf2::Vector3 z_axis(0.0, 0.0, 1.0);
+        double z_angle = atan2(manip_point.y, manip_point.x);
 
-        std::cout << pose << std::endl;
+        // Get the correct rotation
+        tf2::Matrix3x3 res_mat;
+        res_mat.setEulerYPR(z_angle, pitch, 0.0);
+        tf2::Quaternion res_quat;
+        res_mat.getRotation(res_quat);
 
-        // return setPose(pose, result_pose, err);
-        return true;
+        // Some magic with quaternions to get the correct orientation
+        // tf2::Quaternion z_quat, y_quat, temp_quat, res_quat;
+        // z_quat.setRotation(z_axis, z_angle);
+        // temp_quat = z_quat * tf2::Quaternion(0.0, 1.0, 0.0, 0.0) * z_quat.inverse();
+        // tf2::Vector3 y_axis = temp_quat.getAxis();
+        // y_quat.setRotation(y_axis, pitch);
+        // res_quat = y_quat * z_quat;
+
+        pose.orientation = tf2::toMsg(res_quat);
+
+        return setPose(pose, result_pose, err);
     }
 
     void Aleph2ManipKinematics::solutionCallback(const geometry_msgs::Pose& ik_pose,
@@ -208,10 +226,6 @@ namespace aleph2_manip_kinematics
         rot_quat = fk_quat * ik_quat.inverse();
         double angle = rot_quat.getAngleShortestPath();
 
-        // std::cout << "ik_pose: " << std::endl << ik_pose << std::endl;
-        // std::cout << "fk_pose: " << std::endl << fk_pose << std::endl;
-        // std::cout << "angle: " << angle << std::endl;
-
         // Check if the angle is tolerable
         if (angle > ANGLE_TOLERANCE) {
             error_code.val = error_code.FAILURE;
@@ -236,6 +250,24 @@ namespace aleph2_manip_kinematics
         pose.position.y = transform.transform.translation.y;
         pose.position.z = transform.transform.translation.z;
         pose.orientation = transform.transform.rotation;
+
+        return true;
+    }
+
+    bool Aleph2ManipKinematics::getCurrentPitch(double& pitch)
+    {
+        geometry_msgs::Pose pose;
+
+        if (!getCurrentPose(pose)) 
+            return false;
+
+        tf2::Quaternion rot_quat;
+        tf2::convert(pose.orientation, rot_quat);
+
+        tf2::Matrix3x3 rot_mat(rot_quat);
+
+        double roll, yaw;
+        rot_mat.getEulerYPR(yaw, pitch, roll); 
 
         return true;
     }
