@@ -31,7 +31,8 @@ namespace aleph2_manip_kinematics
     {
         IK_SOLVER_FAILED,
         SOLUTION_IN_SELF_COLLISION,
-        FK_SOLVER_FAILED
+        FK_SOLVER_FAILED,
+        INVALID_GROUP_STATE
     };
 
     class Aleph2ManipKinematics
@@ -43,10 +44,11 @@ namespace aleph2_manip_kinematics
          * @param check_collision if set to true, self-collision checking will be enabled 
          * (default true)
          */
-        Aleph2ManipKinematics(bool check_collision = true);
+        Aleph2ManipKinematics(const std::string &group_name = "manip", 
+                              bool check_collision = true);
 
         /**
-         * @brief set the pose of the end-effector
+         * @brief Set the pose of the end-effector
          * @param pose The pose to move the end-effector to
          * @param result_pose The actual pose of the end-effector returned
          * by the forward kinematics solver. If the function failed, it is the 
@@ -54,12 +56,12 @@ namespace aleph2_manip_kinematics
          * @param err An error code that encodes the reason for failure
          * @return true, if the position was set successfully, false otherwise
          */
-        bool setPose(const geometry_msgs::Pose& pose, 
-                     geometry_msgs::Pose& result_pose,
-                     KinematicsError& err);
+        bool setPose(const geometry_msgs::Pose &pose, 
+                     geometry_msgs::Pose &result_pose,
+                     KinematicsError &err);
         
         /**
-         * @brief set the pose of the end-effector
+         * @brief Set the pose of the end-effector
          * @param position The position to move the end-effector to
          * @param pitch The pitch angle of the end-effector pose
          * @param result_pose The actual pose of the end-effector returned
@@ -68,27 +70,31 @@ namespace aleph2_manip_kinematics
          * @param err An error code that encodes the reason for failure
          * @return true, if the position was set successfully, false otherwise
          */
-        bool setPose(const geometry_msgs::Point& position, 
-                     const double& pitch, 
-                     geometry_msgs::Pose& result_pose,
-                     KinematicsError& err);
+        bool setPose(const geometry_msgs::Point &position, 
+                     const double &pitch, 
+                     geometry_msgs::Pose &result_pose,
+                     KinematicsError &err);
+
+        /**
+         * @brief Set the pose of the end-effector
+         * @param group_state The name of the group state defined in the SRDF model
+         * @param result_pose The actual pose of the end-effector returned
+         * by the forward kinematics solver. If the function failed, it is the 
+         * last correct pose
+         * @param err An error code that encodes the reason for failure
+         * @return true, if the position was set successfully, false otherwise
+         */
+        bool setPose(const std::string &group_state, 
+                     geometry_msgs::Pose &result_pose,
+                     KinematicsError &err);
         
         /**
-         * get the current pose of the end-effector tip published on TF
-         * 
+         * @brief Get the current pose of the end-effector tip published on TF
          * @param pose The pose of the end-effector tip
          * @return true, if the position was retrieved successfully, false otherwise
          */
         bool getCurrentPose(geometry_msgs::Pose& pose);
 
-        /**
-         * get the current pitch angle of the end-effector tip published on TF
-         * 
-         * @param pitch The pitch angle of the end-effector tip
-         * @return true, if the position was retrieved successfully, false otherwise
-         */
-        bool getCurrentPitch(double& pitch);
-    
     private:
 
         void solutionCallback(const geometry_msgs::Pose& ik_pose,
@@ -108,12 +114,17 @@ namespace aleph2_manip_kinematics
         std::shared_ptr<KDL::ChainFkSolverPos> fk_solver_;
 
         // memory
-        robot_state::RobotState* robot_state_;
+        const std::string group_name_;
+        const std::vector<std::string> *joint_names_;
+        int joints_nr_;
+        std::shared_ptr<urdf::Model> urdf_model_;
+        std::shared_ptr<srdf::Model> srdf_model_;
+        robot_state::RobotState *robot_state_;
+        KDL::Tree robot_tree_;
+        KDL::Chain manip_chain_;
         geometry_msgs::Pose current_pose_;
         std::vector<double> current_joint_states_;
         sensor_msgs::JointState fake_joint_states_;
-        KDL::Tree robot_tree_;
-        KDL::Chain manip_chain_;
 
         // ROS stuff
         ros::NodeHandle nh_;
@@ -125,6 +136,8 @@ namespace aleph2_manip_kinematics
         tf2_ros::TransformListener tf_listener_;
         geometry_msgs::TransformStamped manip_transform_;
     };
+
+    double get_pitch(const geometry_msgs::Pose &pose);
 }
 
 

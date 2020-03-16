@@ -13,13 +13,15 @@
 
 namespace aleph2_manip_kinematics
 {
-    Aleph2ManipKinematics::Aleph2ManipKinematics(bool check_collision)
-        : check_collision_(check_collision),
+    Aleph2ManipKinematics::Aleph2ManipKinematics(const std::string &group_name, 
+                                                 bool check_collision)
+        : group_name_(group_name),
+          check_collision_(check_collision),
           current_joint_states_(NR_OF_JOINTS+1),
           tf_listener_(tf_buffer_)
     {
-        auto urdf_model = std::make_shared<urdf::Model>();
-        auto srdf_model = std::make_shared<srdf::Model>();
+        urdf_model_ = std::make_shared<urdf::Model>();
+        srdf_model_ = std::make_shared<srdf::Model>();
         std::string robot_description;
         std::string robot_description_semantic;
         std::vector<std::string> tip_frames = {"efector_tip"};
@@ -35,23 +37,23 @@ namespace aleph2_manip_kinematics
             ROS_BREAK();
         }
 
-        if (!urdf_model->initString(robot_description)) {
+        if (!urdf_model_->initString(robot_description)) {
             ROS_FATAL("Failed to create urdf model object");
             ROS_BREAK();
         }
 
-        if (!srdf_model->initString(*urdf_model, robot_description_semantic)) {
+        if (!srdf_model_->initString(*urdf_model_, robot_description_semantic)) {
             ROS_FATAL("Failed to create srdf model object");
             ROS_BREAK();
         }
 
         auto robot_model = std::make_shared<moveit::core::RobotModel>(
-            urdf_model, 
-            srdf_model
+            urdf_model_, 
+            srdf_model_
         );
 
         // Get the KDL robot tree and chain for the manipulator
-        if (!kdl_parser::treeFromUrdfModel(*urdf_model, robot_tree_)) {
+        if (!kdl_parser::treeFromUrdfModel(*urdf_model_, robot_tree_)) {
             ROS_FATAL("Failed to construct the KDL tree");
             ROS_BREAK();
         }
@@ -72,16 +74,20 @@ namespace aleph2_manip_kinematics
         try {
             ik_solver_ = ik_solver_loader_->createInstance("aleph_manip_kinematics/IKFastKinematicsPlugin"); 
         }
-        catch(pluginlib::PluginlibException& ex) {
+        catch(pluginlib::PluginlibException &ex) {
             ROS_FATAL("The kinematics plugin failed to load. Error: %s", ex.what());
             ROS_BREAK();
         } 
 
         // Initialize the IK solver
-        if (!ik_solver_->initialize("aleph1/robot_description", "manip", "base_link", tip_frames, 5)){
+        if (!ik_solver_->initialize("aleph1/robot_description", group_name_, "base_link", tip_frames, 5)){
             ROS_FATAL("The kinematics solver failed to initialize!");
             ROS_BREAK();
         }
+
+        // Get information about joints
+        joint_names_ = &ik_solver_->getJointNames();
+        joints_nr_ = joint_names_->size();
 
         // Initialize the FK solver
         fk_solver_ = std::make_shared<KDL::ChainFkSolverPos_recursive>(manip_chain_);
@@ -94,7 +100,7 @@ namespace aleph2_manip_kinematics
 
         // advertise the fake joint states topic
         fake_joint_pub_ = nh_.advertise<sensor_msgs::JointState>("aleph1/fake_joint_states", 10);
-        fake_joint_states_.name = ik_solver_->getJointNames();
+        fake_joint_states_.name = *joint_names_;
 
         // Get the transform to manip's base link
         try {
@@ -106,9 +112,9 @@ namespace aleph2_manip_kinematics
         }
     }
 
-    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Pose& pose, 
-                                        geometry_msgs::Pose& result_pose,
-                                        KinematicsError& err)
+    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Pose &pose, 
+                                        geometry_msgs::Pose &result_pose,
+                                        KinematicsError &err)
     {
         std::vector<double> solution;
         moveit_msgs::MoveItErrorCodes moveit_error;
@@ -124,7 +130,7 @@ namespace aleph2_manip_kinematics
 
         // Check for self-collision
         if (check_collision_) {
-            const std::vector<std::string>& joint_names = ik_solver_->getJointNames();
+            const std::vector<std::string> &joint_names = ik_solver_->getJointNames();
 
             for (int i = 0; i < NR_OF_JOINTS; ++i)
                 robot_state_->setJointPositions(joint_names[i], &solution[i]);
@@ -165,10 +171,10 @@ namespace aleph2_manip_kinematics
         return true;
     }
 
-    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Point& position, 
-                                        const double& pitch, 
-                                        geometry_msgs::Pose& result_pose,
-                                        KinematicsError& err)
+    bool Aleph2ManipKinematics::setPose(const geometry_msgs::Point &position, 
+                                        const double &pitch, 
+                                        geometry_msgs::Pose &result_pose,
+                                        KinematicsError &err)
     {
         geometry_msgs::Pose pose;
         pose.position = position;
@@ -200,9 +206,46 @@ namespace aleph2_manip_kinematics
         return setPose(pose, result_pose, err);
     }
 
-    void Aleph2ManipKinematics::solutionCallback(const geometry_msgs::Pose& ik_pose,
-                          const std::vector<double>& ik_solution,
-                          moveit_msgs::MoveItErrorCodes& error_code)
+    bool Aleph2ManipKinematics::setPose(const std::string &group_state, 
+                                        geometry_msgs::Pose &result_pose,
+                                        KinematicsError &err)
+    {
+        for (auto state : srdf_model_->getGroupStates())
+        {
+            if (state.group_ == group_name_ && state.name_ == group_state) {
+                // state.joint_values_
+                KDL::JntArray joint_pos_kdl(5);
+                
+                for (int i = 0; i < joints_nr_; ++i)
+                {
+                    const std::string &joint_name = (*joint_names_)[i];
+                    try {
+                        joint_pos_kdl(i) = state.joint_values_.at(joint_name)[0];
+                    } catch(std::out_of_range &ex) {
+                        ROS_WARN_STREAM("No '" << joint_name <<"' joint in group state '" << state.name_ << "'");
+                    }
+                }
+
+                KDL::Frame pose_kdl;
+                if (fk_solver_->JntToCart(joint_pos_kdl, pose_kdl) < 0) {
+                    err = KinematicsError::FK_SOLVER_FAILED;
+                    return false;
+                }
+
+                geometry_msgs::Pose pose;
+                tf::poseKDLToMsg(pose_kdl, pose);
+
+                return setPose(pose, result_pose, err);
+            }
+        }
+
+        err = KinematicsError::INVALID_GROUP_STATE;
+        return false;
+    }
+
+    void Aleph2ManipKinematics::solutionCallback(const geometry_msgs::Pose &ik_pose,
+                          const std::vector<double> &ik_solution,
+                          moveit_msgs::MoveItErrorCodes &error_code)
     {
         const double elbow_angle = ik_solution[2] + OFFSETS[2];
 
@@ -254,25 +297,7 @@ namespace aleph2_manip_kinematics
         return true;
     }
 
-    bool Aleph2ManipKinematics::getCurrentPitch(double& pitch)
-    {
-        geometry_msgs::Pose pose;
-
-        if (!getCurrentPose(pose)) 
-            return false;
-
-        tf2::Quaternion rot_quat;
-        tf2::convert(pose.orientation, rot_quat);
-
-        tf2::Matrix3x3 rot_mat(rot_quat);
-
-        double roll, yaw;
-        rot_mat.getEulerYPR(yaw, pitch, roll); 
-
-        return true;
-    }
-
-    bool Aleph2ManipKinematics::getFKPose(const std::vector<double>& joint_pos, geometry_msgs::Pose& pose)
+    bool Aleph2ManipKinematics::getFKPose(const std::vector<double> &joint_pos, geometry_msgs::Pose &pose)
     {
         KDL::JntArray joint_pos_kdl(5);
         for (int i = 0; i < 5; ++i)
@@ -287,4 +312,18 @@ namespace aleph2_manip_kinematics
         tf::poseKDLToMsg(pose_kdl, pose);
         return true;
     }
+
+    double get_pitch(const geometry_msgs::Pose &pose)
+    {
+        tf2::Quaternion rot_quat;
+        tf2::convert(pose.orientation, rot_quat);
+
+        tf2::Matrix3x3 rot_mat(rot_quat);
+
+        double roll, pitch, yaw;
+        rot_mat.getEulerYPR(yaw, pitch, roll); 
+
+        return pitch;
+    }
+
 }

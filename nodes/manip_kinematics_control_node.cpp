@@ -21,11 +21,12 @@ void command_callback(const aleph2_manip::KinematicsCommandConstPtr& msg)
 bool activate_callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
     if (!active) {
-        if (!manip_kinematics->getCurrentPose(ee_pose) || !manip_kinematics->getCurrentPitch(ee_pitch)) {
+        if (!manip_kinematics->getCurrentPose(ee_pose)) {
             ROS_ERROR("Failed to retrieve the current pose of the end-effector!");
             return false;
         }
         ee_position = ee_pose.position;
+        ee_pitch = aleph2_manip_kinematics::get_pitch(ee_pose);
         cmd = aleph2_manip::KinematicsCommand();
         active = true;
         ROS_INFO("Kinematics control activated");
@@ -58,7 +59,7 @@ int main(int argc, char **argv)
 
     pnh.param("loop_rate", loop_rate, 30);
     
-    manip_kinematics = new aleph2_manip_kinematics::Aleph2ManipKinematics();
+    manip_kinematics = new aleph2_manip_kinematics::Aleph2ManipKinematics("manip");
 
     ros::Subscriber cmd_sub = nh.subscribe("aleph2/manip/kinematics/command", 1, command_callback);
     ros::ServiceServer activate_srv = nh.advertiseService("aleph2/manip/kinematics/activate", activate_callback);
@@ -75,60 +76,80 @@ int main(int argc, char **argv)
         ros::spinOnce();
 
         if (active){ 
+            bool success;
 
-            double duration = (current_time - last_update).toSec();
+            if (cmd.pose_cmd) {
+                if (cmd.pose_cmd == cmd.SAFE_POSE)
+                    success = manip_kinematics->setPose("safe", ee_pose, error);
+                else if (cmd.pose_cmd == cmd.ZERO_POSE)
+                    success = manip_kinematics->setPose("zero", ee_pose, error);
 
-            geometry_msgs::Point new_ee_position = ee_position;
-            double new_ee_pitch = ee_pitch;
+                if (success) {
+                    ee_position = ee_pose.position;
+                    ee_pitch = aleph2_manip_kinematics::get_pitch(ee_pose);
+                }
+            }
+            else {
+                double duration = (current_time - last_update).toSec();
 
-            // Apply linear translation
-            new_ee_position.x += cmd.ee_x_cmd * duration;
-            new_ee_position.y += cmd.ee_y_cmd * duration;
-            new_ee_position.z += cmd.ee_z_cmd * duration;
+                geometry_msgs::Point new_ee_position = ee_position;
+                double new_ee_pitch = ee_pitch;
 
-            // Apply pitch rotation
-            new_ee_pitch += cmd.ee_pitch_cmd * duration;
+                // Apply linear translation
+                new_ee_position.x += cmd.ee_x_cmd * duration;
+                new_ee_position.y += cmd.ee_y_cmd * duration;
+                new_ee_position.z += cmd.ee_z_cmd * duration;
 
-            // Get the translation in tip's frame
-            geometry_msgs::Vector3 ee_tip_vector;
-            ee_tip_vector.x = cmd.ee_tip_x_cmd * duration;
-            ee_tip_vector.y = cmd.ee_tip_y_cmd * duration,
-            ee_tip_vector.z = cmd.ee_tip_z_cmd * duration;
+                // Apply pitch rotation
+                new_ee_pitch += cmd.ee_pitch_cmd * duration;
 
-            // Rotate the vector
-            geometry_msgs::TransformStamped rot_transform;
-            rot_transform.transform.rotation = ee_pose.orientation;
-            tf2::doTransform(ee_tip_vector, ee_tip_vector, rot_transform);
+                // Get the translation in tip's frame
+                geometry_msgs::Vector3 ee_tip_vector;
+                ee_tip_vector.x = cmd.ee_tip_x_cmd * duration;
+                ee_tip_vector.y = cmd.ee_tip_y_cmd * duration,
+                ee_tip_vector.z = cmd.ee_tip_z_cmd * duration;
 
-            // Apply the translation
-            new_ee_position.x += ee_tip_vector.x;
-            new_ee_position.y += ee_tip_vector.y;
-            new_ee_position.z += ee_tip_vector.z;
+                // Rotate the vector
+                geometry_msgs::TransformStamped rot_transform;
+                rot_transform.transform.rotation = ee_pose.orientation;
+                tf2::doTransform(ee_tip_vector, ee_tip_vector, rot_transform);
 
-            if (!manip_kinematics->setPose(new_ee_position, new_ee_pitch, ee_pose, error))
-            {
-                switch(error)
-                {
+                // Apply the translation
+                new_ee_position.x += ee_tip_vector.x;
+                new_ee_position.y += ee_tip_vector.y;
+                new_ee_position.z += ee_tip_vector.z;
+
+                success = manip_kinematics->setPose(new_ee_position, new_ee_pitch, ee_pose, error);
+
+                if (success) {
+                    ee_position = new_ee_position;
+                    ee_pitch = new_ee_pitch;
+                }
+            }
+
+            if (!success) {
+                switch(error) {
                     case aleph2_manip_kinematics::KinematicsError::IK_SOLVER_FAILED:
                         ROS_DEBUG("IK solver failed to find solution");
                         break;
                     case aleph2_manip_kinematics::KinematicsError::SOLUTION_IN_SELF_COLLISION:
                         ROS_DEBUG("Solution in self collision");
                         break;
+                    case aleph2_manip_kinematics::KinematicsError::FK_SOLVER_FAILED:
+                        ROS_ERROR("FK solver failed to find the pose");
+                        break;
+                    case aleph2_manip_kinematics::KinematicsError::INVALID_GROUP_STATE:
+                        ROS_ERROR("Group state not found in SRDF model");
+                        break;
                     default:
                         ROS_ERROR_STREAM("Unknown error! Error code: " << static_cast<int>(error));
                 }
             }
-            else 
-            {
-                ee_position = new_ee_position;
-                ee_pitch = new_ee_pitch;
 
-                pose_msg.header.stamp = ros::Time::now();
-                pose_msg.header.frame_id = "base_link";
-                pose_msg.pose = ee_pose;
-                pose_pub.publish(pose_msg);
-            }
+            pose_msg.header.stamp = ros::Time::now();
+            pose_msg.header.frame_id = "base_link";
+            pose_msg.pose = ee_pose;
+            pose_pub.publish(pose_msg);
         }
 
         last_update = current_time;
