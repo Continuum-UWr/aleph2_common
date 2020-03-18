@@ -18,6 +18,8 @@
 #include "kdl/tree.hpp"
 #include "kdl/chainfksolver.hpp"
 
+#include "aleph2_manip/KinematicsConfig.h"
+
 
 namespace aleph2_manip_kinematics
 {
@@ -44,8 +46,7 @@ namespace aleph2_manip_kinematics
          * @param check_collision if set to true, self-collision checking will be enabled 
          * (default true)
          */
-        Aleph2ManipKinematics(const std::string &group_name = "manip", 
-                              bool check_collision = true);
+        Aleph2ManipKinematics(const std::string &group_name = "manip");
 
         /**
          * @brief Set the pose of the end-effector
@@ -93,19 +94,21 @@ namespace aleph2_manip_kinematics
          * @param pose The pose of the end-effector tip
          * @return true, if the position was retrieved successfully, false otherwise
          */
-        bool getCurrentPose(geometry_msgs::Pose& pose);
+        bool getCurrentPose(geometry_msgs::Pose &pose);
+
+        void setConfig(aleph2_manip::KinematicsConfig &config) { config_ = config; }
 
     private:
 
-        void solutionCallback(const geometry_msgs::Pose& ik_pose,
-                              const std::vector<double>& ik_solution,
-                              moveit_msgs::MoveItErrorCodes& error_code);
+        void solutionCallback(const geometry_msgs::Pose &ik_pose,
+                              const std::vector<double> &ik_solution,
+                              moveit_msgs::MoveItErrorCodes &error_code);
 
-        bool getFKPose(const std::vector<double>& joint_pos, geometry_msgs::Pose& pose);
+        bool getFKPose(const std::vector<double> &joint_pos, geometry_msgs::Pose &pose);
 
 
         // configuration
-        bool check_collision_;
+        aleph2_manip::KinematicsConfig config_;
 
         // solvers
         std::shared_ptr<pluginlib::ClassLoader<kinematics::KinematicsBase>> ik_solver_loader_;

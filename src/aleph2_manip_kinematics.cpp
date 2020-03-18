@@ -13,11 +13,8 @@
 
 namespace aleph2_manip_kinematics
 {
-    Aleph2ManipKinematics::Aleph2ManipKinematics(const std::string &group_name, 
-                                                 bool check_collision)
+    Aleph2ManipKinematics::Aleph2ManipKinematics(const std::string &group_name)
         : group_name_(group_name),
-          check_collision_(check_collision),
-          current_joint_states_(NR_OF_JOINTS+1),
           tf_listener_(tf_buffer_)
     {
         urdf_model_ = std::make_shared<urdf::Model>();
@@ -88,6 +85,7 @@ namespace aleph2_manip_kinematics
         // Get information about joints
         joint_names_ = &ik_solver_->getJointNames();
         joints_nr_ = joint_names_->size();
+        current_joint_states_.resize(joints_nr_);
 
         // Initialize the FK solver
         fk_solver_ = std::make_shared<KDL::ChainFkSolverPos_recursive>(manip_chain_);
@@ -129,7 +127,7 @@ namespace aleph2_manip_kinematics
         }
 
         // Check for self-collision
-        if (check_collision_) {
+        if (config_.check_collision) {
             const std::vector<std::string> &joint_names = ik_solver_->getJointNames();
 
             for (int i = 0; i < NR_OF_JOINTS; ++i)

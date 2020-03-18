@@ -1,9 +1,11 @@
 #include "aleph2_manip_kinematics/aleph2_manip_kinematics.h"
-#include "aleph2_manip/KinematicsCommand.h"
 
 #include "std_srvs/Empty.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+
+#include "dynamic_reconfigure/server.h"
+#include "aleph2_manip/KinematicsCommand.h"
 
 geometry_msgs::Pose ee_pose;
 geometry_msgs::Point ee_position;
@@ -16,6 +18,10 @@ bool active = false;
 void command_callback(const aleph2_manip::KinematicsCommandConstPtr& msg)
 {
     cmd = *msg;
+}
+
+void config_callback(aleph2_manip::KinematicsConfig &config, uint32_t level) {
+    manip_kinematics->setConfig(config);
 }
 
 bool activate_callback(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
@@ -66,6 +72,9 @@ int main(int argc, char **argv)
     ros::ServiceServer deactivate_srv = nh.advertiseService("aleph2/manip/kinematics/deactivate", deactivate_callback);
 
     ros::Publisher pose_pub = nh.advertise<geometry_msgs::PoseStamped>("aleph2/manip/kinematics/pose", 10);
+
+    dynamic_reconfigure::Server<aleph2_manip::KinematicsConfig> config_server;
+    config_server.setCallback(boost::bind(&config_callback, _1, _2));
 
     ros::Time last_update = ros::Time::now();
     ros::Rate rate(loop_rate);
