@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>aleph2_description</name>
+  <version>1.0.0</version>
+  <description>Rover's vizualization package</description>
+
+  <maintainer email="blazej@todo.todo">blazej</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+</package>

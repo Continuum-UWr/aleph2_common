@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="aleph2">
+
+  <xacro:arg name="fixed" default="false"/>
+
+  <xacro:include filename="$(find aleph2_description)/urdf/aleph2.gazebo.xacro" />
+  <xacro:include filename="$(find aleph2_description)/urdf/materials.urdf.xacro" />
+  <xacro:include filename="$(find aleph2_description)/urdf/manip.urdf.xacro" />
+  <xacro:include filename="$(find aleph2_description)/urdf/zed.urdf.xacro" />
+
+  <xacro:if value="$(arg fixed)">
+    <link name="world"/>
+    <joint name="fixed" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin xyz="0.0 0.0 2.0"/>
+    </joint>
+  </xacro:if>
+
+  <!-- LINKS -->
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/meshes/base.STL" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+      <material name="base" />
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.02" length="0.12" />
+      </geometry>
+      <origin xyz="0.06 0.125 0.063" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.016" length="0.1" />
+      </geometry>
+      <origin xyz="0.151 0.175 0.053" />
+      <material name="encoder">
+        <color rgba="0 0.5 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.72 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.08 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.16 0.5 0.1"/>
+      </geometry>
+      <origin xyz="-0.06 0 0.09"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.02" length="0.12" />
+      </geometry>
+      <origin xyz="0.06 0.125 0.063" />
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.016" length="0.1" />
+      </geometry>
+      <origin xyz="0.151 0.175 0.053" />
+    </collision>
+    <inertial>
+      <origin xyz="-0.06700 0.00064 0.00551"/>
+      <mass value="9.0" />
+      <inertia ixx="0.23691" ixy="-0.00014" ixz="-0.00314" 
+               iyy="0.23328" iyz="-0.00054" izz="0.40961" />
+    </inertial>
+  </link>
+
+  <xacro:macro name="rocker" params="name">
+    <link name="rocker_${name}_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://aleph2_description/meshes/rocker.STL"/>
+        </geometry>
+        <material name="rocker" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://aleph2_description/meshes/rocker_collision.STL" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0.00000 -0.01737 0.03763"/>
+        <mass value="1.5" />
+        <inertia ixx="0.01934" ixy="-0.00942" ixz="-0.00271" 
+                 iyy="0.03716" iyz="0.00516"  izz="0.04409" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="wheel" params="name"> 
+    <link name="wheel_${name}_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+        </geometry>
+        <material name="wheel" />
+      </visual>
+      <visual name="piasta">
+        <geometry>
+          <cylinder radius="0.05" length="0.12"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <material name="piasta">
+          <color rgba="0.5 0.5 0.5 1" />
+        </material>
+      </visual>
+      <visual name="walek">
+        <geometry>
+          <cylinder radius="0.0055" length="0.15"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <material name="walek">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.16" length="0.1" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      </collision>
+      <collision>
+        <geometry>
+          <cylinder radius="0.007" length="0.15"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      </collision>
+      <inertial>
+        <origin xyz="0.00000 0.00000 0.00000"/>
+        <mass value="6.0" />
+        <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" 
+                 iyy="0.06495" iyz="0.00000" izz="0.03845" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:rocker name="R" />
+  <xacro:rocker name="L" />
+
+  <xacro:wheel name="FR" />
+  <xacro:wheel name="RR" />
+  <xacro:wheel name="FL" />
+  <xacro:wheel name="RL" />
+
+  <link name="mast_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.02" length="1.3" />
+      </geometry>
+      <origin xyz="0 0 0.65" rpi="0 0 0"/>
+      <material name="mast" />
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="1.3" />
+      </geometry>
+      <origin xyz="0 0 0.65" rpi="0 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.1" length="0.7" />
+      </geometry>
+      <origin xyz="0 0 0.95" rpi="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </link>
+
+  <!-- JOINTS -->
+
+  <joint name="rocker_R_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rocker_R_link"/>
+      <origin xyz="0 -0.375 0" rpy="${pi/2} 0 ${pi}"/>
+  </joint>
+
+  <joint name="rocker_L_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rocker_L_link"/>
+      <origin xyz="0 0.375 0" rpy="${pi/2} 0 0"/>
+  </joint>
+
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="mast_link" />
+    <origin xyz="-0.22 0.25 -0.15"/>
+  </joint>
+
+  <joint name="wheel_FR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_FR_link"/>
+    <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_RR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_RR_link"/>
+    <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_FL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_FL_link"/>
+    <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_RL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_RL_link"/>
+    <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <!-- TRASNMISSIONS -->
+
+  <transmission name="wheel_FR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_FL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_RR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_RL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>

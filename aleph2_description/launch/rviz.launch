@@ -1,0 +1,4 @@
+<launch>
+    <arg name="rvizconfig" default="$(find aleph2_description)/rviz/aleph2.rviz" />
+    <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" output="screen"/>
+</launch>
