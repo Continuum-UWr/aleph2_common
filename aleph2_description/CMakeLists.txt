@@ -5,14 +5,7 @@ find_package(catkin REQUIRED)
 
 catkin_package()
 
-#############
-## Install ##
-#############
-
-install(DIRECTORY
-  meshes
-  rviz
-  launch
-  urdf
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+foreach(dir launch meshes textures urdf)
+	install(DIRECTORY ${dir}/
+		DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
