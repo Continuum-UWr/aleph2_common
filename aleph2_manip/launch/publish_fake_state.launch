@@ -1,0 +1,29 @@
+<launch>
+    <arg name="gui" default="false"/>
+
+    <group ns="aleph1">
+        <node name="robot_state_publisher" 
+              pkg="robot_state_publisher" 
+              type="robot_state_publisher" 
+              output="screen"/>
+
+        <node unless="$(arg gui)"
+              name="joint_state_publisher" 
+              pkg="joint_state_publisher" 
+              type="joint_state_publisher" 
+              output="screen">
+            <rosparam param="source_list">[fake_joint_states]</rosparam>
+            <param name="rate" value="30"/>
+        </node>
+
+        <node if="$(arg gui)"
+              name="joint_state_publisher_gui"
+              pkg="joint_state_publisher_gui"
+              type="joint_state_publisher_gui"
+              output="screen">
+            <rosparam param="source_list">[fake_joint_states]</rosparam>
+            <param name="rate" value="30"/>
+        </node>
+
+    </group>
+</launch>

@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+
+import rospy
+from input_msgs.msg import InputMessage
+from aleph2_manip.msg import KinematicsCommand
+
+rospy.init_node("joy_control")
+
+control_pub = rospy.Publisher("aleph2/manip/kinematics/command", KinematicsCommand, queue_size=5)
+
+def joy_callback(msg):
+    cmd = KinematicsCommand()
+
+    cmd.ee_tip_x_cmd = -msg.axes[1] * 0.1
+    cmd.ee_tip_y_cmd = -msg.axes[0] * 0.1
+    cmd.ee_tip_z_cmd = (msg.axes[5] - msg.axes[2]) * 0.1
+
+    cmd.ee_pitch_cmd = msg.axes[4]* 1.0
+
+    if msg.buttons[6]:
+        cmd.pose_cmd = cmd.ZERO_POSE
+    if msg.buttons[7]:
+        cmd.pose_cmd = cmd.SAFE_POSE
+        
+    control_pub.publish(cmd)
+
+joy_sub = rospy.Subscriber("/input/Microsoft_X_Box_360_pad_0_blazej_pc", InputMessage, joy_callback, queue_size=5)
+
+rospy.spin()
