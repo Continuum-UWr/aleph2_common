@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- LINKS -->
+
+  <xacro:macro name="wheel" params="name"> 
+    <link name="wheel_${name}_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://aleph2_description/meshes/wheel.STL"/>
+        </geometry>
+        <material name="wheel" />
+      </visual>
+      <visual name="piasta">
+        <geometry>
+          <cylinder radius="0.05" length="0.12"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <material name="piasta">
+          <color rgba="0.5 0.5 0.5 1" />
+        </material>
+      </visual>
+      <visual name="walek">
+        <geometry>
+          <cylinder radius="0.0055" length="0.15"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <material name="walek">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.16" length="0.1" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      </collision>
+      <collision>
+        <geometry>
+          <cylinder radius="0.007" length="0.15"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      </collision>
+      <inertial>
+        <origin xyz="0.00000 0.00000 0.00000"/>
+        <mass value="6.0" />
+        <inertia ixx="0.03845" ixy="0.00000" ixz="0.00000" 
+                 iyy="0.06495" iyz="0.00000" izz="0.03845" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:wheel name="FR" />
+  <xacro:wheel name="RR" />
+  <xacro:wheel name="FL" />
+  <xacro:wheel name="RL" />
+
+  <!-- JOINTS -->
+
+  <joint name="wheel_FR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_FR_link"/>
+    <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_RR_joint" type="continuous">
+    <parent link="rocker_R_link"/>
+    <child link="wheel_RR_link"/>
+    <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_FL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_FL_link"/>
+    <origin xyz="0.418 -0.226 -0.07" rpy="${-pi/2} 0 0" />
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <joint name="wheel_RL_joint" type="continuous">
+    <parent link="rocker_L_link"/>
+    <child link="wheel_RL_link"/>
+    <origin xyz="-0.418 -0.226 -0.07" rpy="${pi/2} 0 0" />
+    <axis xyz="0 -1 0"/>
+    <dynamics damping="0.5" friction="0.2"/>
+    <limit effort="20" velocity="25.0"/>
+  </joint>
+
+  <!-- TRANSMISSIONS -->
+
+  <transmission name="wheel_FR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_FL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_FL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_FL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_RR_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RR_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RR_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="wheel_RL_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wheel_RL_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wheel_RL_actuator">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>
