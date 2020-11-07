@@ -146,7 +146,7 @@
     <origin xyz="0 -0.375 0" rpy="${pi/2} 0 ${pi}"/>
     <axis xyz="0 0 1"/>
     <limit effort="100.0" lower="-0.3" upper="0.3" velocity="100.0"/>
-    <dynamics friction="1.0" damping="0.1"/>
+    <dynamics friction="1.0" damping="0.5"/>
   </joint>
 
   <joint name="rocker_L_joint" type="${rockers_joint_type}">
@@ -155,7 +155,7 @@
     <origin xyz="0 0.375 0" rpy="${pi/2} 0 0"/>
     <axis xyz="0 0 1"/>
     <limit effort="100.0" lower="-0.3" upper="0.3" velocity="100.0"/>
-    <dynamics friction="1.0" damping="0.1"/>
+    <dynamics friction="1.0" damping="0.5"/>
   </joint>
 
   <joint name="mast_joint" type="fixed">
@@ -163,5 +163,26 @@
     <child link="mast_link" />
     <origin xyz="-0.22 0.25 -0.15"/>
   </joint>
+
+  <!-- TRANSMISSIONS -->
+
+  <!-- Dummy transmissions for rocker joints -->
+  <xacro:unless value="$(arg rockers_fixed)">
+    <transmission name="rocker_L_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="rocker_L_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="rocker_L_virtual_motor"/>
+    </transmission>
+
+    <transmission name="rocker_R_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="rocker_R_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="rocker_R_virtual_motor"/>
+    </transmission>
+  </xacro:unless>
 
 </robot>
