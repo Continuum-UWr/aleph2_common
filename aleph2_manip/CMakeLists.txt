@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.2)
 project(aleph2_manip)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -46,6 +46,9 @@ include_directories(
 
 add_library(aleph2_manip_kinematics
     src/aleph2_manip_kinematics)
+
+add_dependencies(aleph2_manip_kinematics
+    ${PROJECT_NAME}_gencfg)
 
 add_executable(manip_kinematics_control_node
     nodes/manip_kinematics_control_node.cpp)
