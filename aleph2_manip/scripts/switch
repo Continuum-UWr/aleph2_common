@@ -5,7 +5,7 @@ from controller_manager_msgs.srv import SwitchController, SwitchControllerReques
 
 rospy.init_node("switch")
 
-service_name = "/aleph2/controller_manager/switch_controller"
+service_name = "aleph2/controller_manager/switch_controller"
 
 rospy.wait_for_service(service_name)
 switch_controller = rospy.ServiceProxy(service_name, SwitchController)
