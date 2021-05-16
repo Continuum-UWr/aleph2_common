@@ -4,7 +4,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <aleph2_manip/KinematicsCommand.h>
-#include <aleph2_manip_kinematics/aleph2_manip_kinematics.h"
+#include <aleph2_manip_kinematics/aleph2_manip_kinematics.h>
 
 geometry_msgs::Pose ee_pose;
 geometry_msgs::Point ee_position;
