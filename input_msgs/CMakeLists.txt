@@ -9,6 +9,7 @@ add_message_files(
   DIRECTORY msg
   FILES
   InputMessage.msg
+  DevicesListMessage.msg
 )
 
 generate_messages()
