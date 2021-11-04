@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>aleph2_teleop</name>
+  <version>0.0.0</version>
+  <description>
+    Scripts and launch files for Aleph2 teleoperation
+  </description>
+
+  <maintainer email="continuum@cs.uni.wroc.pl">Continuum Rover Team</maintainer>
+  <author>Błażej Sowa</author>
+
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>joy</exec_depend>
+  <exec_depend>teleop_twist_joy</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
