@@ -22,6 +22,8 @@
 
   <!-- LINKS -->
 
+  <link name="base_footprint"/>
+
   <link name="base_link">
     <visual>
       <geometry>
@@ -132,6 +134,12 @@
   </link>
 
   <!-- JOINTS -->
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0.33" rpy="0 0 0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
 
   <xacro:if value="$(arg rockers_fixed)">
     <xacro:property name="rockers_joint_type" value="fixed"/>
