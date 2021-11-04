@@ -1,0 +1,377 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- LINKS -->
+
+  <link name="manip_base_link">
+    <visual>
+      <geometry>
+          <mesh filename="package://aleph2_description/models/manip_base.STL"/>
+      </geometry>
+      <origin rpy="${pi/2} 0 ${-pi/2}"/>
+      <material name="manip" />
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.125" length="0.02" />
+      </geometry>
+      <origin xyz="0 0 0.01"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.11" length="0.025" />
+      </geometry>
+      <origin xyz="0 0.017 0.09" rpy="${pi/2} 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.1 0.15 0.15"/>
+      </geometry>
+      <origin xyz="0 0 0.075"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.1 0.22 0.10"/>
+      </geometry>
+      <origin xyz="0 0 0.05"/>
+    </collision>
+    <inertial>
+      <origin xyz="-0.00251 0.00769 0.05483"/>
+      <mass value="2.0" />
+      <inertia ixx="0.00845" ixy="-0.00007" ixz="-0.00023" 
+               iyy="0.00892" iyz="0.00049"  izz="0.00862" />
+    </inertial>
+  </link>
+
+  <link name="manip_shoulder_link">
+    <visual>
+      <geometry>
+          <mesh filename="package://aleph2_description/models/manip_shoulder.STL"/>
+      </geometry>
+      <origin rpy="${pi} 0 0"/>
+      <material name="manip" />
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.0225" length="0.122"/>
+      </geometry>
+      <origin xyz="0.082 0 0.106" rpy="0 0 0" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material> 
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.0225" length="0.122"/>
+      </geometry>
+      <origin xyz="0.2 0 0.106" rpy="0 0 0" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material> 
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.017" length="0.054"/>
+      </geometry>
+      <origin xyz="0.147 -0.005 0.072" rpy="0 0 0" />
+      <material name="enkoder">
+        <color rgba="0 0.5 0 1"/>
+      </material> 
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.017" length="0.054"/>
+      </geometry>
+      <origin xyz="0.278 0 0.072" rpy="0 0 0" />
+      <material name="enkoder">
+        <color rgba="0 0.5 0 1"/>
+      </material> 
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.07 0.1" />
+      </geometry>
+      <origin xyz="0.2 0.0 0" />
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.035" length="0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.035" length="0.1"/>
+      </geometry>
+      <origin xyz="0.4 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.0225" length="0.122"/>
+      </geometry>
+      <origin xyz="0.082 0 0.106" rpy="0 0 0" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material> 
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.0225" length="0.122"/>
+      </geometry>
+      <origin xyz="0.2 0 0.106" rpy="0 0 0" />
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material> 
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.017" length="0.054"/>
+      </geometry>
+      <origin xyz="0.147 -0.005 0.072" rpy="0 0 0" />
+      <material name="enkoder">
+        <color rgba="0 0.5 0 1"/>
+      </material> 
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.017" length="0.054"/>
+      </geometry>
+      <origin xyz="0.278 0 0.072" rpy="0 0 0" />
+      <material name="enkoder">
+        <color rgba="0 0.5 0 1"/>
+      </material> 
+    </collision>
+    <inertial>
+      <origin xyz="0.20075 0.00074 0.00055"/>
+      <mass value="3.0" />
+      <inertia ixx="0.00612" ixy="-0.00012" ixz="0.00022" 
+               iyy="0.04816" iyz="0.00000"  izz="0.04531" />
+    </inertial>
+  </link>
+
+  <link name="manip_elbow_link">
+    <visual>
+      <geometry>
+          <mesh filename="package://aleph2_description/models/manip_elbow.STL"/>
+      </geometry>
+      <origin rpy="0 ${pi/2} 0"/>
+      <material name="manip" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.4 0.06 0.09" />
+      </geometry>
+      <origin xyz="0.2 0.0 0" />
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.03" length="0.09"/>
+      </geometry>
+      <origin xyz="0.4 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <cylinder radius="0.085" length="0.025"/>
+      </geometry>
+      <origin xyz="0 0 0.02"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.12196 0.00137 0.00713"/>
+      <mass value="3.0" />
+      <inertia ixx="0.00480" ixy="-0.00030" ixz="-0.00277" 
+               iyy="0.05728" iyz="0.00004"  izz="0.05732" />
+    </inertial>
+  </link>
+
+  <link name="manip_wrist_link">
+    <visual>
+      <geometry>
+          <mesh filename="package://aleph2_description/models/manip_wrist.STL"/>
+      </geometry>
+      <origin rpy="0 ${pi/2} 0"/>
+      <material name="manip" />
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder radius="0.02" length="0.108"/>
+      </geometry>
+      <origin xyz="-0.03 0 0" rpy="0 ${pi/2} 0"/>
+      <material name="motor">
+        <color rgba="0 0 0.5 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <box size="0.015 0.03 0.008"/>
+      </geometry>
+      <origin xyz="-0.088 0.005 0" rpy="0 ${pi/2} 0"/>
+      <material name="enkoder">
+        <color rgba="0 0.5 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.154 0.052 0.060"/>
+      </geometry>
+      <origin xyz="-0.016 0 0" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="-0.02500 0.00000 0.00000"/>
+      <mass value="0.7" />
+      <inertia ixx="0.00042" ixy="0.00000" ixz="0.00000" 
+               iyy="0.00120" iyz="0.00000" izz="0.00112" />
+    </inertial>
+  </link> 
+
+  <link name="manip_gripper_link">
+    <visual>
+      <geometry>
+          <mesh filename="package://aleph2_description/models/manip_gripper.STL"/>
+      </geometry>
+      <origin rpy="0 ${pi/2} 0"/>
+      <material name="manip" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.017 0.072 0.03"/>
+      </geometry>
+      <origin xyz="0.0085 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.09 0.171 0.054"/>
+      </geometry>
+      <origin xyz="0.061 0 0"/>
+    </collision>
+    <collision>
+      <geometry>
+        <box size="0.049 0.068 0.089"/>
+      </geometry>
+      <origin xyz="0.0405 -0.1155 0.0175"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.04679 -0.03978 0.00393"/>
+      <mass value="1.0" />
+      <inertia ixx="0.00496" ixy="0.00022" ixz="-0.00002" 
+               iyy="0.00108" iyz="-0.00036" izz="0.00535" />
+    </inertial>
+  </link>
+
+  <link name="manip_jaw_L_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/models/manip_jaw.STL" />
+      </geometry>
+      <origin rpy="${-pi/2} 0 ${pi/2}"/>
+      <material name="manip" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.180 0.035 0.027" />
+      </geometry>
+      <origin xyz="0.09 0.0105 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.09230 0.00805 0.00000"/>
+      <mass value="0.15" />
+      <inertia ixx="0.00003" ixy="0.00005" ixz="0.00000" 
+               iyy="0.00033" iyz="0.00000" izz="0.00033" />
+    </inertial>
+  </link>
+
+  <link name="manip_jaw_R_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://aleph2_description/models/manip_jaw.STL" />
+      </geometry>
+      <origin rpy="${-pi/2} ${pi} ${pi/2}"/>
+      <material name="manip" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.180 0.035 0.027" />
+      </geometry>
+      <origin xyz="0.09 -0.0105 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0.09230 -0.00805 0.00000"/>
+      <mass value="0.15" />
+      <inertia ixx="0.00003" ixy="0.00005" ixz="0.00000" 
+               iyy="0.00033" iyz="0.00000" izz="0.00033" />
+    </inertial>
+  </link>
+
+  <link name="manip_effector_tip_frame"/>
+
+  <!-- JOINTS -->
+
+  <joint name="manip_base_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="manip_base_link"/>
+    <origin xyz="0.151 0.0035 0.032"/>
+    <axis xyz="0 0 -1"/>
+    <limit effort="100" velocity="0.15"/> 
+    <dynamics damping="100.0" friction="60.0"/>
+  </joint>
+
+  <joint name="manip_shoulder_joint" type="revolute">
+    <parent link="manip_base_link"/>
+    <child link="manip_shoulder_link"/>
+    <origin xyz="0 0 0.09" rpy="${pi/2} ${-pi/2} 0"/>
+    <axis xyz="0 0 1" />
+    <limit effort="100" lower="${-pi/2}" upper="${pi/2}" velocity="0.3"/>
+    <dynamics damping="100.0" friction="60.0"/>
+  </joint>
+
+  <joint name="manip_elbow_joint" type="revolute">
+    <parent link="manip_shoulder_link"/>
+    <child link="manip_elbow_link"/>
+    <origin xyz="0.4 0 0" rpy="${pi} 0 0" />
+    <axis xyz="0 0 1" />
+    <limit effort="100" lower="-2.28" upper="2.43" velocity="0.5"/>
+    <dynamics damping="100.0" friction="50.0"/>
+  </joint>
+
+  <joint name="manip_wrist_tilt_joint" type="revolute">
+    <parent link="manip_elbow_link"/>
+    <child link="manip_wrist_link"/>
+    <origin xyz="0.4 0 0" />
+    <axis xyz="0 0 -1" />
+    <limit effort="100" lower="-2.2" upper="2.2" velocity="0.5"/>
+    <dynamics damping="20.0" friction="40.0"/>
+  </joint>
+
+  <joint name="manip_wrist_roll_joint" type="revolute">
+    <parent link="manip_wrist_link"/>
+    <child link="manip_gripper_link"/>
+    <origin xyz="0.06 0 0" rpy="${-pi/2} 0 0"/>
+    <axis xyz="-1 0 0" />
+    <limit effort="50" lower="${-pi}" upper="${pi}" velocity="0.5"/>
+    <dynamics damping="3.0" friction="10.0"/>
+  </joint>
+
+  <joint name="manip_gripper_joint" type="prismatic">
+    <parent link="manip_gripper_link"/>
+    <child link="manip_jaw_L_link"/>
+    <origin xyz="0.025 -0.03 0"/>
+    <axis xyz="0 1 0" />
+    <limit effort="60" lower="-0.033" upper="0" velocity="0.05"/>
+    <dynamics damping="5.0" friction="30.0"/>
+  </joint>
+
+  <joint name="manip_gripper_mimic_joint" type="prismatic">
+    <parent link="manip_gripper_link"/>
+    <child link="manip_jaw_R_link"/>
+    <origin xyz="0.025 0.03 0"/>
+    <axis xyz="0 -1 0" />
+    <mimic joint="manip_gripper_joint" />
+    <limit effort="60" lower="-0.033" upper="0" velocity="0.05"/>
+    <dynamics damping="5.0" friction="30.0"/>
+  </joint>
+
+  <joint name="manip_effector_tip_joint" type="fixed">
+    <parent link="manip_gripper_link"/>
+    <child link="manip_effector_tip_frame"/>
+    <origin xyz="0.20 0 0"/>
+  </joint>
+
+</robot>

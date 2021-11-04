@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <material name="base">
+    <color rgba="0.3 0.3 0.3 1"/>
+  </material>
+  
+  <material name="rocker">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="wheel">
+    <texture filename="package://aleph2_description/textures/wheel.jpg" />
+  </material>
+
+  <material name="manip">
+    <color rgba="0.4 0.4 0.4 1"/>
+  </material>
+
+  <material name="motor">
+    <color rgba="0 0 0.5 1"/>
+  </material>
+
+  <material name="encoder">
+    <color rgba="0 0.5 0 1"/>
+  </material>
+
+  <material name="mast">
+    <color rgba="0.8 0.8 0.8 1" />
+  </material>
+
+</robot>
