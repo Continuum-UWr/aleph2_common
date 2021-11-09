@@ -18,6 +18,7 @@
   <exec_depend>teleop_twist_keyboard</exec_depend>
 
   <export>
+    <architecture_independent/>
     <build_type>ament_cmake</build_type>
   </export>
 
