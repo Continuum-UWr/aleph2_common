@@ -1,5 +1,3 @@
-#include <list>
-#include <sstream>
 #include <chrono>
 
 #include "input_manager/msg/device_list.hpp"

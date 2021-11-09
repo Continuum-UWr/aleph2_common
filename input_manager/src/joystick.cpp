@@ -1,6 +1,4 @@
 #include <cmath>
-#include <functional>
-#include <list>
 #include <climits>
 
 #include <unistd.h>
