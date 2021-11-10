@@ -12,7 +12,9 @@ RosTalker::RosTalker()
 {
   this->declare_parameter("update_period_ms", 20);
 
-  device_list_pub_ = this->create_publisher<input_manager::msg::DeviceList>("input/devices", 1);
+  device_list_pub_ = this->create_publisher<input_manager::msg::DeviceList>(
+    "input/devices", rclcpp::QoS(
+      1).transient_local());
 
   int update_period_ms;
   this->get_parameter("update_period_ms", update_period_ms);
