@@ -7,21 +7,23 @@
 
 using namespace std::literals::chrono_literals;
 
-RosTalker::RosTalker()
-: Node("input_manager")
+RosTalker::RosTalker(const std::string & node_name)
+: Node(node_name)
 {
   this->declare_parameter("update_period_ms", 20);
 
-  device_list_pub_ = this->create_publisher<input_manager::msg::DeviceList>(
-    "input/devices", rclcpp::QoS(
-      1).transient_local());
+  auto qos = rclcpp::QoS(1)
+    .reliable()
+    .transient_local();
+
+  device_list_pub_ = this->create_publisher<input_manager::msg::DeviceList>("input/devices", qos);
 
   int update_period_ms;
   this->get_parameter("update_period_ms", update_period_ms);
-  timer_ =
-    this->create_wall_timer(
+  timer_ = this->create_wall_timer(
     std::chrono::milliseconds(update_period_ms),
-    std::bind(&RosTalker::update, this));
+    std::bind(&RosTalker::update, this)
+  );
 }
 
 void RosTalker::registerDevice(int joy_id)
@@ -52,20 +54,26 @@ void RosTalker::unregisterDevice(int joy_id)
   publishDevices();
 }
 
-void RosTalker::publishDevices(bool shutdown)
+void RosTalker::publishDevices()
 {
   input_manager::msg::DeviceList msg;
 
   msg.node_name = get_name();
-  if (!shutdown) {
-    for (auto [joy_id, _] : publishers_) {
-      auto dev = (*devices_)[joy_id];
-      msg.devices.push_back(dev->name);
-      msg.active.push_back(dev->active);
-    }
+  for (auto [joy_id, _] : publishers_) {
+    auto dev = (*devices_)[joy_id];
+    msg.devices.push_back(dev->name);
+    msg.active.push_back(dev->active);
   }
 
   device_list_pub_->publish(msg);
+}
+
+void RosTalker::shutdown()
+{
+  std::lock_guard<std::mutex> publishers_lock(publishers_mutex_);
+
+  publishers_.clear();
+  publishDevices();
 }
 
 void RosTalker::update()

@@ -1,7 +1,4 @@
 #include <cmath>
-#include <climits>
-
-#include <unistd.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -16,14 +13,17 @@
 
 #define DEADZONE 0.10f
 
-char hostname[HOST_NAME_MAX];
-
-JoystickManager::JoystickManager(std::shared_ptr<JoystickHandler> handler, rclcpp::Logger logger)
-: handler_(handler), logger_(logger), clock_(RCL_SYSTEM_TIME), devices_(new DeviceMap())
+JoystickManager::JoystickManager(
+  const char * hostname,
+  std::shared_ptr<JoystickHandler> handler,
+  rclcpp::Logger logger)
+: hostname_(hostname),
+  handler_(handler),
+  logger_(logger),
+  clock_(RCL_SYSTEM_TIME),
+  devices_(new DeviceMap())
 {
   SDL_Init(SDL_INIT_JOYSTICK);
-  gethostname(hostname, HOST_NAME_MAX);
-
   handler_->setDeviceMap(devices_);
 }
 
@@ -40,7 +40,8 @@ inline float axisValue(float value)
   return axis_value;
 }
 
-inline bool isJoystickEvent(const SDL_Event& event){
+inline bool isJoystickEvent(const SDL_Event & event)
+{
   return event.type >= SDL_JOYAXISMOTION && event.type < SDL_CONTROLLERAXISMOTION;
 }
 
@@ -66,7 +67,7 @@ void JoystickManager::threadLoop()
     }
 
     // We are only interested in joystick events
-    if (!isJoystickEvent(event)) continue;
+    if (!isJoystickEvent(event)) {continue;}
 
     RCLCPP_DEBUG(logger_, "Received event type %d", event.type);
 
@@ -77,7 +78,7 @@ void JoystickManager::threadLoop()
 
     // The joystick instance id is at the same offset for all event types
     int joy_id = event.jdevice.which;
-    
+
     if (devices_->find(joy_id) == devices_->end()) {
       RCLCPP_WARN_THROTTLE(
         logger_, clock_, 1000, "Received an event for a lost device");
@@ -151,12 +152,14 @@ void JoystickManager::newDevice(int dev_id)
     SDL_JoystickNumButtons(joy) +
     SDL_JoystickNumHats(joy) * 4);
   dev->name = SDL_JoystickName(joy);
-  dev->name += std::string("_") + std::to_string(joy_id);
-  dev->name += std::string("_") + std::string(hostname);
+  dev->name += "_" + std::to_string(joy_id);
+  dev->name += "_" + hostname_;
 
   std::replace_if(
     dev->name.begin(), dev->name.end(),
-    [](char x) -> bool {return !(std::isalnum(x) || x == '_');}, '_');
+    [](char x) -> bool {
+      return !(std::isalnum(x) || x == '_');
+    }, '_');
 
   for (int i = 0; i < dev->buttons_c; i++) {
     dev->buttons[i] = SDL_JoystickGetButton(joy, i);

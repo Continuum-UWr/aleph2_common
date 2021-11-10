@@ -39,7 +39,10 @@ public:
   JoystickManager(JoystickManager const &) = delete;
   void operator=(JoystickManager const &) = delete;
 
-  JoystickManager(std::shared_ptr<JoystickHandler> handler, rclcpp::Logger logger);
+  JoystickManager(
+    const char * hostname,
+    std::shared_ptr<JoystickHandler> handler,
+    rclcpp::Logger logger);
 
   void start();
   void stop();
@@ -49,6 +52,7 @@ private:
   void newDevice(int id);
   void deviceLost(int id);
 
+  const std::string hostname_;
   std::shared_ptr<JoystickHandler> handler_;
   rclcpp::Logger logger_;
   rclcpp::Clock clock_;
