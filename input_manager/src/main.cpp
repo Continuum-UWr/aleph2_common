@@ -11,7 +11,8 @@ char hostname[HOST_NAME_MAX];
 
 static std::shared_ptr<RosTalker> rostalker;
 
-void MyShutDown(int sig) {
+void MyShutDown(int sig)
+{
   rostalker->shutdown();
   rclcpp::shutdown();
 }
@@ -31,7 +32,8 @@ int main(int argc, char ** argv)
     }, '_');
 
   rostalker = std::make_shared<RosTalker>(node_name);
-  JoystickManager joystick_manager(hostname, rostalker, rostalker->get_logger());
+  JoystickManager joystick_manager(hostname, rostalker,
+    rostalker->get_logger().get_child("JoystickManager"));
 
   signal(SIGINT, MyShutDown);
 
