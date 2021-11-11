@@ -10,9 +10,10 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(SDL2 REQUIRED)
 
-rosidl_generate_interfaces(input_manager_interfaces
+rosidl_generate_interfaces(${PROJECT_NAME}_interfaces
   "msg/DeviceList.msg"
   "msg/Input.msg"
+  LIBRARY_NAME ${PROJECT_NAME}
 )
 
 add_executable(input_manager
