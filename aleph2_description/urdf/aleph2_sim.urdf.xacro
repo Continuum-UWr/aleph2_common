@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="aleph2">
+
+  <xacro:arg name="fixed" default="false"/>
+  <xacro:arg name="rockers_fixed" default="false"/>
+
+  <xacro:include filename="include/materials.xacro" />
+  <xacro:include filename="include/base.xacro" />
+  <xacro:include filename="include/drivetrain.xacro" />
+  <xacro:include filename="include/manip.xacro" />
+  <xacro:include filename="include/zed.xacro" />
+  <xacro:include filename="include/gazebo.xacro" />
+
+  <xacro:if value="$(arg fixed)">
+    <link name="world"/>
+    <joint name="fixed" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin xyz="0.0 0.0 2.0"/>
+    </joint>
+  </xacro:if>
+
+</robot>

@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="rocker_R_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="rocker_L_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="wheel_FL_link">
+    <material>Gazebo/FlatBlack</material>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="wheel_FR_link">
+    <material>Gazebo/FlatBlack</material>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="wheel_RL_link">
+    <material>Gazebo/FlatBlack</material>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="wheel_RR_link">
+    <material>Gazebo/FlatBlack</material>
+    <mu1>3.0</mu1>
+    <mu2>0.5</mu2>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="mast_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <gazebo reference="manip_base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="manip_shoulder_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_elbow_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_wrist_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_gripper_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_jaw_L_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <gazebo reference="manip_jaw_R_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <!-- rocker differential -->
+  <xacro:unless value="$(arg rockers_fixed)">
+    <gazebo>
+      <plugin name="rocker_differential" filename="libaleph2_gazebo_differential_plugin.so">
+        <jointA>rocker_L_joint</jointA>
+        <jointB>rocker_R_joint</jointB>
+        <forceConstant>5000.0</forceConstant>
+      </plugin>
+    </gazebo>
+  </xacro:unless>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <parameters>package://aleph2_description/config/controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <ros2_control name="DrivetrainGazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="rocker_L_joint">
+      <state_interface name="position"/>
+    </joint>
+    <joint name="rocker_R_joint">
+      <state_interface name="position"/>
+    </joint>
+    <joint name="wheel_FL_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="wheel_RL_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="wheel_FR_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="wheel_RR_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+  <ros2_control name="ManipGazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="manip_base_joint">
+      <command_interface name="effort"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="manip_shoulder_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="manip_elbow_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="manip_wrist_tilt_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="manip_wrist_roll_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="manip_gripper_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+</robot>
