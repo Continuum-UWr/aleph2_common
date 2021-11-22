@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(SDL2 REQUIRED)
 
+
 add_message_files(
   DIRECTORY msg
   FILES
@@ -51,6 +52,7 @@ add_dependencies(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${SDL2_LIBRARIES}
+  -ludev
 )
 
 #############

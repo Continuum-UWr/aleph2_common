@@ -1,0 +1,7 @@
+joysticks:
+  - {serial: "", name: "Continuum"}
+  - {serial: "ABCD", name: "Continuum1"}
+  - {serial: "EFGH", name: "Continuum2"}
+  - {serial: "IJKL", name: "Continuum3"}
+  - {serial: "MNOP", name: "Continuum4"}
+  - {serial: "00000000001A", name: "Continuum5"}

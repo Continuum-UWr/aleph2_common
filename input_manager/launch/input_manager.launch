@@ -1,0 +1,5 @@
+<launch>
+    <node name="input_manager" pkg="input_manager" type="input_manager" output="screen" clear_params="true">
+        <rosparam command="load" file="$(find input_manager)/data/joystick_mapping.yaml"/>
+    </node>
+</launch>

@@ -26,6 +26,7 @@ class JoystickManager {
 
   void NewDevice(int id);
   void DeviceLost(int id);
+  std::string GetSerial(char *path);
   std::unordered_map<int, std::shared_ptr<DeviceState>> devices;
 };
 

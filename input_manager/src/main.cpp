@@ -3,6 +3,8 @@
 
 #include "joystick.h"
 
+
+
 void MyShutDown(int sig) {
   RosTalker::Instance().PublishDevices(true);
   ros::shutdown();

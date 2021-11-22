@@ -17,5 +17,5 @@
   <depend>std_msgs</depend>
 
   <depend>sdl2</depend>
-
+  <depend>udev</depend>
 </package>
