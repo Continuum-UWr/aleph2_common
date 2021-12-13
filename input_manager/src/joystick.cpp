@@ -188,9 +188,8 @@ std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
   std::string serial_id = "_";
   std::string name = "";
 
-
   std::string path = exorcismus(dev);
-  RCLCPP_INFO(logger_, "pa to");
+
   /* Create the udev object */
 	udev = udev_new();
 	if (!udev) {
@@ -219,13 +218,14 @@ std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
       
     /* Get '/dev' device path */
     const char *dev_path = udev_device_get_devnode(u_device);
-    std::string dev_path_str = std::string(dev_path);
     if(!dev_path) {
       RCLCPP_DEBUG(logger_, "Couldn't get the device '/dev' path");
       udev_device_unref(u_device);
       continue;
     }
     
+    std::string dev_path_str = std::string(dev_path);
+
     if(dev_path_str != path) {
       udev_device_unref(u_device);
       continue;
@@ -247,6 +247,7 @@ std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
       serial_id = std::string(temp_serial);
 		
     udev_device_unref(u_device);
+    break;
 	}
 	/* Free the enumerator object */
 	udev_enumerate_unref(enumerate);
