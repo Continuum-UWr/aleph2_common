@@ -53,7 +53,7 @@ private:
   void threadLoop();
   void newDevice(int id);
   void deviceLost(int id);
-  std::string getJoystickName(SDL_Joystick *dev);
+  std::string getJoystickName(SDL_Joystick * joy, SDL_JoystickID joy_id);
 
   const std::string hostname_;
   std::shared_ptr<JoystickHandler> handler_;

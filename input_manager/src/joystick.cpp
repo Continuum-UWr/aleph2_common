@@ -179,7 +179,7 @@ static std::string exorcismus(SDL_Joystick * device) {
 }
 
 
-std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
+std::string JoystickManager::getJoystickName(SDL_Joystick *joy, SDL_JoystickID joy_id) {
    /* udev */
   struct udev *udev;
   struct udev_enumerate *enumerate;
@@ -188,7 +188,7 @@ std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
   std::string serial_id = "_";
   std::string name = "";
 
-  std::string path = exorcismus(dev);
+  std::string path = exorcismus(joy);
 
   /* Create the udev object */
 	udev = udev_new();
@@ -259,12 +259,23 @@ std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
   // }
 
   //get the name by serial
-  RCLCPP_DEBUG(logger_, "serial id: %s", serial_id.c_str());
-  //ROS_ASSERT(serial_id);
-  //RCLCPP_DEBUG(logger_, "count: %d", joysticks_mapping.count(serial_id));
+  RCLCPP_DEBUG_STREAM(logger_, "serial id: " << serial_id);
   
   //if(joysticks_mapping.find(serial_id) != joysticks_mapping.end())
-  name = joysticks_mapping[serial_id].as<std::string>();
+  auto serial = joysticks_mapping[serial_id];
+  if (serial) {
+    name = serial.as<std::string>();
+  } else {
+    name = SDL_JoystickName(joy);
+    name += "_" + std::to_string(joy_id);
+    name += "_" + hostname_;
+
+    std::replace_if(
+      name.begin(), name.end(),
+      [](char x) -> bool {
+        return !(std::isalnum(x) || x == '_');
+      }, '_');
+  }
 
   return name;
 }
@@ -281,16 +292,7 @@ void JoystickManager::newDevice(int dev_id)
   dev->buttons.resize(
     SDL_JoystickNumButtons(joy) +
     SDL_JoystickNumHats(joy) * 4);
-  // dev->name = SDL_JoystickName(joy);
-  // dev->name += "_" + std::to_string(joy_id);
-  // dev->name += "_" + hostname_;
-
-  // std::replace_if(
-  //   dev->name.begin(), dev->name.end(),
-  //   [](char x) -> bool {
-  //     return !(std::isalnum(x) || x == '_');
-  //   }, '_');
-  dev->name = JoystickManager::getJoystickName(joy);
+  dev->name = getJoystickName(joy, joy_id);
 
 
   for (int i = 0; i < dev->buttons_c; i++) {

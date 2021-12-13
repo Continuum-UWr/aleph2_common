@@ -11,7 +11,7 @@ char hostname[HOST_NAME_MAX];
 
 static std::shared_ptr<RosTalker> rostalker;
 
-void MyShutDown(int sig)
+void MyShutDown(int)
 {
   rostalker->shutdown();
   rclcpp::shutdown();
