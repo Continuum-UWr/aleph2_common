@@ -11,6 +11,7 @@
 #include "rclcpp/clock.hpp"
 
 #include "SDL2/SDL_joystick.h"
+#include "yaml-cpp/yaml.h"
 
 struct Device
 {
@@ -62,4 +63,5 @@ private:
   std::shared_ptr<DeviceMap> devices_;
   std::thread * thread_;
   bool active_;
+  YAML::Node joystick_mapping_;
 };

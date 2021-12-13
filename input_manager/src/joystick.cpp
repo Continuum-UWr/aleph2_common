@@ -14,12 +14,9 @@
 #include "joystick.hpp"
 #include "rostalker.hpp"
 
-#include "yaml-cpp/yaml.h"
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
 #define DEADZONE 0.10f
-
-static YAML::Node joysticks_mapping;
 
 JoystickManager::JoystickManager(
   const char * hostname,
@@ -36,7 +33,7 @@ JoystickManager::JoystickManager(
 
   std::string package_path = ament_index_cpp::get_package_share_directory("input_manager");
   std::string yaml_file = package_path + "/data/joystick_mapping.yaml";
-  joysticks_mapping = YAML::LoadFile(yaml_file);
+  joystick_mapping_ = YAML::LoadFile(yaml_file);
 }
 
 inline float axisValue(float value)
@@ -249,15 +246,10 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
   /* Free the udev context */
   udev_unref(udev);
 
-  // for(auto elem: joysticks_mapping) {
-  //   ROS_DEBUG("map test: %s, %s", elem.first.c_str(), elem.second.c_str());
-  // }
-
   //get the name by serial
   RCLCPP_DEBUG_STREAM(logger_, "serial id: " << serial_id);
 
-  //if(joysticks_mapping.find(serial_id) != joysticks_mapping.end())
-  auto serial = joysticks_mapping[serial_id];
+  auto serial = joystick_mapping_[serial_id];
   if (serial) {
     name = serial.as<std::string>();
   } else {
