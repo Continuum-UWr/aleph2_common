@@ -10,6 +10,8 @@
 #include "rclcpp/logger.hpp"
 #include "rclcpp/clock.hpp"
 
+#include "SDL2/SDL_joystick.h"
+
 struct Device
 {
   std::mutex mutex;
@@ -51,6 +53,7 @@ private:
   void threadLoop();
   void newDevice(int id);
   void deviceLost(int id);
+  std::string getJoystickName(SDL_Joystick *dev);
 
   const std::string hostname_;
   std::shared_ptr<JoystickHandler> handler_;

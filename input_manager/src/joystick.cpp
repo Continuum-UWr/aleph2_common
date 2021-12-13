@@ -1,4 +1,7 @@
 #include <cmath>
+#include <cstring>
+
+#include <libudev.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -11,7 +14,12 @@
 #include "joystick.hpp"
 #include "rostalker.hpp"
 
+#include "yaml-cpp/yaml.h"
+#include "ament_index_cpp/get_package_share_directory.hpp"
+
 #define DEADZONE 0.10f
+
+static YAML::Node joysticks_mapping;
 
 JoystickManager::JoystickManager(
   const char * hostname,
@@ -25,6 +33,17 @@ JoystickManager::JoystickManager(
 {
   SDL_Init(SDL_INIT_JOYSTICK);
   handler_->setDeviceMap(devices_);
+
+  //  ros::param::get("~joysticks", yaml_joysticks);
+  
+  // ROS_ASSERT(yaml_joysticks.getType() == XmlRpc::XmlRpcValue::TypeArray);
+  // for(int i = 0; i < yaml_joysticks.size(); i++) {
+  //   XmlRpc::XmlRpcValue &p = yaml_joysticks[i];
+  //   joysticks_mapping[static_cast<std::string>(p["serial"])] = static_cast<std::string>(p["name"]);
+  // }
+  std::string package_path =  ament_index_cpp::get_package_share_directory("input_manager");
+  std::string yaml_file = package_path + "/data/joystick_mapping.yaml";
+  joysticks_mapping = YAML::LoadFile(yaml_file);
 }
 
 inline float axisValue(float value)
@@ -140,8 +159,129 @@ void JoystickManager::threadLoop()
   }
 }
 
+static std::string exorcismus(SDL_Joystick * device) {
+    /*
+  Exorcizamus te, omnis immundus spiritus, omnis satanica potestas, 
+  omnis incursio infernalis adversarii, omnis legio, omnis congregatio et secta diabolica. 
+  Ergo, omnis legio diabolica, adiuramus te…cessa decipere humanas creaturas, 
+  eisque æternæ perditionìs venenum propinare… Vade, satana, inventor et magister omnis fallaciæ, 
+  hostis humanæ salutis…Humiliare sub potenti manu Dei; contremisce et effuge, 
+  invocato a nobis sancto et terribili nomine…quem inferi tremunt…Ab insidiis diaboli, libera nos, Domine. 
+  Ut Ecclesiam tuam secura tibi facias libertate servire, te rogamus, audi nos.
+  */
+
+  // kurwa do zmiany jak wejdzie SDL2 i funkcja SDL_GetSerial
+  std::cerr << "tyyyyyyyyyy\n";
+  int *hw_data = *(int **) ((void *)device + 192);
+  std::cerr << "tu\n";
+  int *item = *(int **) ((void *)hw_data + 8);
+  std::cerr << *(int*)hw_data << "\n";
+  char *path = *(char **)((void*)item+8);
+  std::cerr << "sdadad\n";
+  //RCLCPP_DEBUG(logger_, "path from struct: %s", path)
+  std::cerr << (uint64_t) path;
+  if(path)
+    std::cerr << "nie puste\n";
+  else
+    std::cerr << "puste\n";
+  std::string temp(path);
+  std::cerr << "adasd\n";
+  return temp;
+}
+
+
+std::string JoystickManager::getJoystickName(SDL_Joystick *dev) {
+   /* udev */
+  struct udev *udev;
+  struct udev_enumerate *enumerate;
+  struct udev_list_entry *u_devices, *dev_list_entry;
+  struct udev_device *u_device;
+  std::string serial_id = "_";
+  std::string name = "";
+
+
+  std::string path = exorcismus(dev);
+  RCLCPP_INFO(logger_, "pa to");
+  /* Create the udev object */
+	udev = udev_new();
+	if (!udev) {
+		RCLCPP_ERROR(logger_, "Couldn't create new udev context");
+		exit(1);
+	}
+	
+	/* Create a list of the devices in the 'input' subsystem. */
+	enumerate = udev_enumerate_new(udev);
+	udev_enumerate_add_match_subsystem(enumerate, "input");
+	udev_enumerate_scan_devices(enumerate);
+	u_devices = udev_enumerate_get_list_entry(enumerate);
+	udev_list_entry_foreach(dev_list_entry, u_devices) {	
+		/* Get device path in the sys system */
+    const char *sys_path = udev_list_entry_get_name(dev_list_entry);
+    /* Create new udev device */
+		u_device = udev_device_new_from_syspath(udev, sys_path);
+
+    RCLCPP_DEBUG(logger_, "sys path: %s", sys_path);
+
+    if(!u_device) {
+      RCLCPP_DEBUG(logger_, "Couldn't create new udev device: %s", sys_path);
+      udev_device_unref(u_device);
+      continue;
+    }
+      
+    /* Get '/dev' device path */
+    const char *dev_path = udev_device_get_devnode(u_device);
+    std::string dev_path_str = std::string(dev_path);
+    if(!dev_path) {
+      RCLCPP_DEBUG(logger_, "Couldn't get the device '/dev' path");
+      udev_device_unref(u_device);
+      continue;
+    }
+    
+    if(dev_path_str != path) {
+      udev_device_unref(u_device);
+      continue;
+    }
+    
+    RCLCPP_DEBUG(logger_, "dev path: %s", dev_path);
+    
+    /* Get deivce's usb parent */
+		u_device = udev_device_get_parent_with_subsystem_devtype(u_device, "usb","usb_device");
+    
+    if(!u_device) {
+      RCLCPP_DEBUG(logger_, "Couldn't get device usb parent");
+      udev_device_unref(u_device);
+      continue;
+    }
+
+    const char *temp_serial = udev_device_get_sysattr_value(u_device, "serial");
+    if(temp_serial)
+      serial_id = std::string(temp_serial);
+		
+    udev_device_unref(u_device);
+	}
+	/* Free the enumerator object */
+	udev_enumerate_unref(enumerate);
+  /* Free the udev context */
+	udev_unref(udev);
+
+  // for(auto elem: joysticks_mapping) {
+  //   ROS_DEBUG("map test: %s, %s", elem.first.c_str(), elem.second.c_str());
+  // }
+
+  //get the name by serial
+  RCLCPP_DEBUG(logger_, "serial id: %s", serial_id.c_str());
+  //ROS_ASSERT(serial_id);
+  //RCLCPP_DEBUG(logger_, "count: %d", joysticks_mapping.count(serial_id));
+  
+  //if(joysticks_mapping.find(serial_id) != joysticks_mapping.end())
+  name = joysticks_mapping[serial_id].as<std::string>();
+
+  return name;
+}
+
 void JoystickManager::newDevice(int dev_id)
 {
+  
   auto joy = SDL_JoystickOpen(dev_id);
   auto dev = std::make_shared<Device>();
   auto joy_id = SDL_JoystickGetDeviceInstanceID(dev_id);
@@ -151,15 +291,17 @@ void JoystickManager::newDevice(int dev_id)
   dev->buttons.resize(
     SDL_JoystickNumButtons(joy) +
     SDL_JoystickNumHats(joy) * 4);
-  dev->name = SDL_JoystickName(joy);
-  dev->name += "_" + std::to_string(joy_id);
-  dev->name += "_" + hostname_;
+  // dev->name = SDL_JoystickName(joy);
+  // dev->name += "_" + std::to_string(joy_id);
+  // dev->name += "_" + hostname_;
 
-  std::replace_if(
-    dev->name.begin(), dev->name.end(),
-    [](char x) -> bool {
-      return !(std::isalnum(x) || x == '_');
-    }, '_');
+  // std::replace_if(
+  //   dev->name.begin(), dev->name.end(),
+  //   [](char x) -> bool {
+  //     return !(std::isalnum(x) || x == '_');
+  //   }, '_');
+  dev->name = JoystickManager::getJoystickName(joy);
+
 
   for (int i = 0; i < dev->buttons_c; i++) {
     dev->buttons[i] = SDL_JoystickGetButton(joy, i);

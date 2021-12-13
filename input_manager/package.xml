@@ -20,7 +20,9 @@
 
   <depend>rclcpp</depend>
   <depend>sdl2</depend>
-
+  <depend>yaml-cpp</depend>
+  <depend>udev</depend>
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>
