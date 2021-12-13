@@ -1,0 +1,13 @@
+#joysticks:
+#  - {serial: "", name: "Continuum"}
+#  - {serial: "ABCD", name: "Continuum1"}
+#  - {serial: "EFGH", name: "Continuum2"}
+#  - {serial: "IJKL", name: "Continuum3"}
+#  - {serial: "MNOP", name: "Continuum4"}
+#  - {serial: "00000000001A", name: "Continuum5"}  
+"_": "Continuum_default"
+"ABCD": "Continuum1"
+"EFGH": "Continuum2"
+"IJKL": "Continuum3"
+"MNOP": "Continuum4"
+"00000000001A": "Continuum5"
