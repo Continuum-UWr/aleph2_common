@@ -171,22 +171,11 @@ static std::string exorcismus(SDL_Joystick * device) {
   */
 
   // kurwa do zmiany jak wejdzie SDL2 i funkcja SDL_GetSerial
-  std::cerr << "tyyyyyyyyyy\n";
-  int *hw_data = *(int **) ((void *)device + 192);
-  std::cerr << "tu\n";
-  int *item = *(int **) ((void *)hw_data + 8);
-  std::cerr << *(int*)hw_data << "\n";
-  char *path = *(char **)((void*)item+8);
-  std::cerr << "sdadad\n";
-  //RCLCPP_DEBUG(logger_, "path from struct: %s", path)
-  std::cerr << (uint64_t) path;
-  if(path)
-    std::cerr << "nie puste\n";
-  else
-    std::cerr << "puste\n";
-  std::string temp(path);
-  std::cerr << "adasd\n";
-  return temp;
+  uint8_t *hw_data = *(uint8_t **) ((uint8_t *)device + 128);
+  uint8_t *item = *(uint8_t **) (hw_data + 8);
+  char *path = *(char **)(item + 8);
+
+  return std::string(path);
 }
 
 
