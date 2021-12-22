@@ -21,7 +21,9 @@ add_executable(input_manager
   src/rostalker.cpp
 )
 
-include_directories(${YAML_CPP_INCLUDE_DIRS})
+target_include_directories(input_manager
+  PUBLIC ${YAML_CPP_INCLUDE_DIRS}
+)
 
 target_link_libraries(input_manager
   -ludev
@@ -31,7 +33,6 @@ target_link_libraries(input_manager
 ament_target_dependencies(input_manager
   rclcpp
   SDL2
-  yaml-cpp
 )
 
 rosidl_target_interfaces(input_manager
