@@ -100,7 +100,7 @@
 
   <ros2_control name="DrivetrainGazeboSystem" type="system">
     <hardware>
-      <plugin>aleph2_gazebo/Aleph2GazeboSystem</plugin>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
     <joint name="rocker_L_joint">
       <state_interface name="position"/>
@@ -136,7 +136,7 @@
 
   <ros2_control name="ManipGazeboSystem" type="system">
     <hardware>
-      <plugin>aleph2_gazebo/Aleph2GazeboSystem</plugin>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
     <joint name="manip_base_joint">
       <command_interface name="position"/>
