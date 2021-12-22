@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(input_manager)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+add_compile_options(-Wall -Wextra -Wpedantic)
 
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
@@ -35,8 +33,6 @@ ament_target_dependencies(input_manager
   SDL2
   yaml-cpp
 )
-
-add_compile_options(-g)
 
 rosidl_target_interfaces(input_manager
   input_manager_interfaces "rosidl_typesupport_cpp"
