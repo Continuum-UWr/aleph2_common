@@ -20,23 +20,20 @@ add_executable(input_manager
   src/joystick.cpp
   src/rostalker.cpp
 )
-
 target_include_directories(input_manager
-  PUBLIC ${YAML_CPP_INCLUDE_DIRS}
+  PRIVATE 
+    ${YAML_CPP_INCLUDE_DIRS}
+    ${SDL2_INCLUDE_DIRS}
 )
-
 target_link_libraries(input_manager
   -ludev
   ${YAML_CPP_LIBRARIES}
-)
-
-ament_target_dependencies(input_manager
-  rclcpp
   SDL2
+  rclcpp::rclcpp
 )
 
 rosidl_target_interfaces(input_manager
-  input_manager_interfaces "rosidl_typesupport_cpp"
+  ${PROJECT_NAME}_interfaces "rosidl_typesupport_cpp"
 )
 
 install(TARGETS
