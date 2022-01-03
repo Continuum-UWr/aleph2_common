@@ -8,6 +8,7 @@ install(
     config
     launch
     models
+    ros2_control
     textures
     urdf
   DESTINATION share/${PROJECT_NAME}
