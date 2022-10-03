@@ -15,6 +15,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}_interfaces
   LIBRARY_NAME ${PROJECT_NAME}
 )
 
+rosidl_get_typesupport_target(cpp_typesupport_target
+  ${PROJECT_NAME}_interfaces "rosidl_typesupport_cpp"
+)
+
 add_executable(input_manager
   src/main.cpp
   src/joystick.cpp
@@ -30,10 +34,7 @@ target_link_libraries(input_manager
   ${YAML_CPP_LIBRARIES}
   SDL2
   rclcpp::rclcpp
-)
-
-rosidl_target_interfaces(input_manager
-  ${PROJECT_NAME}_interfaces "rosidl_typesupport_cpp"
+  ${cpp_typesupport_target}
 )
 
 install(TARGETS
