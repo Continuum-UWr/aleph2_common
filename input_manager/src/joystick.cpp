@@ -161,8 +161,8 @@ static std::string exorcismus(SDL_Joystick * device)
   Ut Ecclesiam tuam secura tibi facias libertate servire, te rogamus, audi nos.
   */
 
-  // kurwa do zmiany jak wejdzie SDL2 i funkcja SDL_GetSerial
-  uint8_t * hw_data = *(uint8_t **) ((uint8_t *)device + 128);
+  // kurwa do zmiany jak wejdzie SDL 2.24.0 i funkcja SDL_JoystickPath
+  uint8_t * hw_data = *(uint8_t **) ((uint8_t *)device + 184);
   uint8_t * item = *(uint8_t **) (hw_data + 8);
   char * path = *(char **)(item + 8);
 
