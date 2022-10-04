@@ -180,7 +180,7 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
   std::string name = "";
 
   std::string path = exorcismus(joy);
-
+  RCLCPP_DEBUG_STREAM(logger_, "Joystick path: " << path);
   /* Create the udev object */
   udev = udev_new();
   if (!udev) {
@@ -199,7 +199,7 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
     /* Create new udev device */
     u_device = udev_device_new_from_syspath(udev, sys_path);
 
-    RCLCPP_DEBUG(logger_, "sys path: %s", sys_path);
+    RCLCPP_DEBUG(logger_, "Device's syspath: %s", sys_path);
 
     if (!u_device) {
       RCLCPP_DEBUG(logger_, "Couldn't create new udev device: %s", sys_path);
@@ -210,25 +210,26 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
     /* Get '/dev' device path */
     const char * dev_path = udev_device_get_devnode(u_device);
     if (!dev_path) {
-      RCLCPP_DEBUG(logger_, "Couldn't get the device '/dev' path");
+      RCLCPP_DEBUG(logger_, "Couldn't get the device's devnode");
       udev_device_unref(u_device);
       continue;
     }
+
+    RCLCPP_DEBUG(logger_, "Device's devnode path: %s", dev_path);
 
     std::string dev_path_str = std::string(dev_path);
 
     if (dev_path_str != path) {
+      RCLCPP_DEBUG(logger_, "Devnode path does not match joystick path, skipping..");
       udev_device_unref(u_device);
       continue;
     }
 
-    RCLCPP_DEBUG(logger_, "dev path: %s", dev_path);
-
-    /* Get deivce's usb parent */
+    /* Get device's usb parent */
     u_device = udev_device_get_parent_with_subsystem_devtype(u_device, "usb", "usb_device");
 
     if (!u_device) {
-      RCLCPP_DEBUG(logger_, "Couldn't get device usb parent");
+      RCLCPP_DEBUG(logger_, "Couldn't get device's usb parent");
       udev_device_unref(u_device);
       continue;
     }
