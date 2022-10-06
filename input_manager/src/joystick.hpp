@@ -6,6 +6,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <optional>
 
 #include "rclcpp/logger.hpp"
 #include "rclcpp/clock.hpp"
@@ -54,7 +55,8 @@ private:
   void threadLoop();
   void newDevice(int id);
   void deviceLost(int id);
-  std::string getJoystickName(SDL_Joystick * joy, SDL_JoystickID joy_id);
+  std::optional<std::string> getJoystickSerial(SDL_Joystick * joy);
+  std::string getUniqueJoystickName(SDL_Joystick * joy);
 
   const std::string hostname_;
   std::shared_ptr<JoystickHandler> handler_;

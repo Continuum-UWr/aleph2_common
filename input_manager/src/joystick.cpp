@@ -149,7 +149,7 @@ void JoystickManager::threadLoop()
   }
 }
 
-static std::string exorcismus(SDL_Joystick * device)
+static char * getJoystickPath(SDL_Joystick * joy)
 {
   /*
   Exorcizamus te, omnis immundus spiritus, omnis satanica potestas,
@@ -162,24 +162,22 @@ static std::string exorcismus(SDL_Joystick * device)
   */
 
   // kurwa do zmiany jak wejdzie SDL 2.24.0 i funkcja SDL_JoystickPath
-  uint8_t * hw_data = *(uint8_t **) ((uint8_t *)device + 184);
+  uint8_t * hw_data = *(uint8_t **) ((uint8_t *)joy + 184);
   uint8_t * item = *(uint8_t **) (hw_data + 8);
   char * path = *(char **)(item + 8);
 
-  return std::string(path);
+  return path;
 }
 
-
-std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID joy_id)
-{
+std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy) {
+  
   struct udev * udev;
   struct udev_enumerate * enumerate;
   struct udev_list_entry * u_devices, * dev_list_entry;
   struct udev_device * u_device;
-  std::string serial_id = "_";
-  std::string name = "";
+  const char * serial_id = nullptr;
 
-  std::string path = exorcismus(joy);
+  std::string path = getJoystickPath(joy);
   RCLCPP_DEBUG_STREAM(logger_, "Joystick path: " << path);
   /* Create the udev object */
   udev = udev_new();
@@ -234,9 +232,10 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
       continue;
     }
 
-    const char * temp_serial = udev_device_get_sysattr_value(u_device, "serial");
-    if (temp_serial) {
-      serial_id = std::string(temp_serial);
+    serial_id = udev_device_get_sysattr_value(u_device, "serial");
+    if (!serial_id) {
+      RCLCPP_DEBUG(logger_, "Couldn't get device's 'serial' attribute");
+      continue;
     }
 
     udev_device_unref(u_device);
@@ -247,23 +246,35 @@ std::string JoystickManager::getJoystickName(SDL_Joystick * joy, SDL_JoystickID 
   /* Free the udev context */
   udev_unref(udev);
 
-  //get the name by serial
-  RCLCPP_DEBUG_STREAM(logger_, "serial id: " << serial_id);
+  return serial_id ? std::optional<std::string>{serial_id} : std::nullopt;
+}
 
-  auto serial = joystick_mapping_[serial_id];
-  if (serial) {
-    name = serial.as<std::string>();
-  } else {
-    name = SDL_JoystickName(joy);
-    name += "_" + std::to_string(joy_id);
-    name += "_" + hostname_;
+std::string JoystickManager::getUniqueJoystickName(SDL_Joystick * joy)
+{
+  auto serial_id = getJoystickSerial(joy);
+  auto joy_id = SDL_JoystickInstanceID(joy);
+  auto joy_name = SDL_JoystickName(joy);
+  auto joy_vendor = SDL_JoystickGetVendor(joy);
+  auto joy_product = SDL_JoystickGetProduct(joy);
 
-    std::replace_if(
-      name.begin(), name.end(),
-      [](char x) -> bool {
-        return !(std::isalnum(x) || x == '_');
-      }, '_');
+  RCLCPP_INFO(logger_, "Joystick name: '%s', vendor id: %04x, product id: %04x, serial id: '%s'",
+    joy_name, joy_vendor, joy_product, serial_id.value_or("<UNKNOWN>").c_str());
+
+  if (serial_id) {
+    auto name = joystick_mapping_[serial_id.value()];
+    if (name) {
+      return name.as<std::string>();
+    }
   }
+
+  // No predefined unique name for this joystick, create human-readable unique name from joystick name, instance id and the hostname
+  std::string name = std::string(joy_name) + "_" + std::to_string(joy_id) + "_" + hostname_;
+
+  std::replace_if(
+    name.begin(), name.end(),
+    [](char x) -> bool {
+      return !(std::isalnum(x) || x == '_');
+    }, '_');
 
   return name;
 }
@@ -272,15 +283,16 @@ void JoystickManager::newDevice(int dev_id)
 {
   auto joy = SDL_JoystickOpen(dev_id);
   auto dev = std::make_shared<Device>();
-  auto joy_id = SDL_JoystickGetDeviceInstanceID(dev_id);
+  auto joy_id = SDL_JoystickInstanceID(joy);
+
+  RCLCPP_INFO(logger_, "New joystick connected, instance id: %d", joy_id);
 
   dev->axes.resize(SDL_JoystickNumAxes(joy));
   dev->buttons_c = SDL_JoystickNumButtons(joy);
   dev->buttons.resize(
     SDL_JoystickNumButtons(joy) +
     SDL_JoystickNumHats(joy) * 4);
-  dev->name = getJoystickName(joy, joy_id);
-
+  dev->name = getUniqueJoystickName(joy);
 
   for (int i = 0; i < dev->buttons_c; i++) {
     dev->buttons[i] = SDL_JoystickGetButton(joy, i);
