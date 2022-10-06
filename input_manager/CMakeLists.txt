@@ -10,6 +10,7 @@ find_package(SDL2 REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}_interfaces
+  "msg/DeviceInfo.msg"
   "msg/DeviceList.msg"
   "msg/Input.msg"
   LIBRARY_NAME ${PROJECT_NAME}

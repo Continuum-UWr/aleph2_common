@@ -1,5 +1,6 @@
 #include <chrono>
 
+#include "input_manager/msg/device_info.hpp"
 #include "input_manager/msg/device_list.hpp"
 #include "input_manager/msg/input.hpp"
 
@@ -61,7 +62,11 @@ void RosTalker::publishDevices()
   msg.node_name = get_name();
   for (auto [joy_id, _] : publishers_) {
     auto dev = (*devices_)[joy_id];
-    msg.devices.push_back(dev->name);
+    input_manager::msg::DeviceInfo info;
+    info.name = dev->name;
+    info.num_buttons = dev->buttons.size();
+    info.num_axes = dev->axes.size();
+    msg.devices.push_back(info);
     msg.active.push_back(dev->active);
   }
 

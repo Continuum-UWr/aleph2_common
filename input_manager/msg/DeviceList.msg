@@ -1,3 +1,3 @@
 string node_name
-string[] devices
+DeviceInfo[] devices
 bool[] active
