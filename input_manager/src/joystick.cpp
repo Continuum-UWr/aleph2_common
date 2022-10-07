@@ -169,8 +169,9 @@ static char * getJoystickPath(SDL_Joystick * joy)
   return path;
 }
 
-std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy) {
-  
+std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy)
+{
+
   struct udev * udev;
   struct udev_enumerate * enumerate;
   struct udev_list_entry * u_devices, * dev_list_entry;
@@ -257,7 +258,8 @@ std::string JoystickManager::getUniqueJoystickName(SDL_Joystick * joy)
   auto joy_vendor = SDL_JoystickGetVendor(joy);
   auto joy_product = SDL_JoystickGetProduct(joy);
 
-  RCLCPP_INFO(logger_, "Joystick name: '%s', vendor id: %04x, product id: %04x, serial id: '%s'",
+  RCLCPP_INFO(
+    logger_, "Joystick name: '%s', vendor id: %04x, product id: %04x, serial id: '%s'",
     joy_name, joy_vendor, joy_product, serial_id.value_or("<UNKNOWN>").c_str());
 
   if (serial_id) {
@@ -267,7 +269,8 @@ std::string JoystickManager::getUniqueJoystickName(SDL_Joystick * joy)
     }
   }
 
-  // No predefined unique name for this joystick, create human-readable unique name from joystick name, instance id and the hostname
+  // No predefined unique name for this joystick
+  // Create human-readable unique name from joystick name, instance id and the hostname
   std::string name = std::string(joy_name) + "_" + std::to_string(joy_id) + "_" + hostname_;
 
   std::replace_if(
