@@ -88,7 +88,7 @@
   <xacro:rocker name="R" />
   <xacro:rocker name="L" />
 
-  <link name="mast_link">
+  <!-- <link name="mast_link">
     <visual>
       <geometry>
         <cylinder radius="0.02" length="1.3" />
@@ -112,7 +112,7 @@
       <mass value="1.0" />
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
     </inertial>
-  </link>
+  </link> -->
 
   <!-- JOINTS -->
 
@@ -147,10 +147,10 @@
     <dynamics friction="1.0" damping="0.5"/>
   </joint>
 
-  <joint name="mast_joint" type="fixed">
+  <!-- <joint name="mast_joint" type="fixed">
     <parent link="base_link" />
     <child link="mast_link" />
     <origin xyz="-0.22 0.25 -0.15"/>
-  </joint>
+  </joint> -->
 
 </robot>
