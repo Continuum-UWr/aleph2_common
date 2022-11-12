@@ -82,7 +82,7 @@
   <!-- rocker differential -->
   <xacro:unless value="$(arg rockers_fixed)">
     <gazebo>
-      <plugin name="rocker_differential" filename="libaleph2_gazebo_differential_plugin.so">
+      <plugin filename="libaleph2_gz_differential_system.so" name="aleph2_gz::DifferentialSystem">
         <jointA>rocker_L_joint</jointA>
         <jointB>rocker_R_joint</jointB>
         <forceConstant>5000.0</forceConstant>
