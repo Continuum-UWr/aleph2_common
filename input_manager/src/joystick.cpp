@@ -1,13 +1,12 @@
-#include <cmath>
-#include <cstring>
-
 #include <libudev.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_joystick.h>
-
+#include <cmath>
+#include <cstring>
 #include <cctype>
+
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_events.h"
+#include "SDL2/SDL_joystick.h"
 
 #include "rclcpp/clock.hpp"
 
@@ -162,16 +161,16 @@ static char * getJoystickPath(SDL_Joystick * joy)
   */
 
   // kurwa do zmiany jak wejdzie SDL 2.24.0 i funkcja SDL_JoystickPath
-  uint8_t * hw_data = *(uint8_t **) ((uint8_t *)joy + 184);
-  uint8_t * item = *(uint8_t **) (hw_data + 8);
-  char * path = *(char **)(item + 8);
+  uint8_t * joy_mem = reinterpret_cast<uint8_t *>(joy);
+  uint8_t * hw_data = *reinterpret_cast<uint8_t **>(joy_mem + 184);
+  uint8_t * item = *reinterpret_cast<uint8_t **>(hw_data + 8);
+  char * path = *reinterpret_cast<char **>(item + 8);
 
   return path;
 }
 
 std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy)
 {
-
   struct udev * udev;
   struct udev_enumerate * enumerate;
   struct udev_list_entry * u_devices, * dev_list_entry;

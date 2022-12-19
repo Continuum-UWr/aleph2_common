@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include <mutex>
+#include <unordered_map>
+#include <string>
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -17,7 +19,7 @@ typedef std::unordered_map<int,
 class RosTalker : public rclcpp::Node, public JoystickHandler
 {
 public:
-  RosTalker(const std::string & node_name);
+  explicit RosTalker(const std::string & node_name);
 
   void setDeviceMap(std::shared_ptr<DeviceMap> devices) {devices_ = devices;}
   void registerDevice(int joy_id);

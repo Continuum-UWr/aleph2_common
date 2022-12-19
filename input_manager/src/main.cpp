@@ -1,6 +1,7 @@
-#include <climits>
 #include <unistd.h>
 #include <signal.h>
+
+#include <climits>
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -11,8 +12,9 @@ char hostname[HOST_NAME_MAX];
 
 static std::shared_ptr<RosTalker> rostalker;
 
-void MyShutDown(int)
+void MyShutDown(int signum)
 {
+  (void)signum;
   rostalker->shutdown();
   rclcpp::shutdown();
 }

@@ -26,7 +26,7 @@ add_executable(input_manager
   src/rostalker.cpp
 )
 target_include_directories(input_manager
-  PRIVATE 
+  PRIVATE
     ${YAML_CPP_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS}
 )
