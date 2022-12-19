@@ -1,0 +1,13 @@
+image: docker.io/ros:rolling
+stages:
+  - build
+
+aleph2_common build:
+  stage: build
+  before_script:
+  - apt update
+  - rosdep update
+  script:
+  - rosdep install --from-paths . --ignore-src -y
+  - colcon build
+  - colcon test --return-code-on-test-failure --event-handlers desktop_notification- status- terminal_title- console_cohesion+
