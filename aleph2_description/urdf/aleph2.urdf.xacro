@@ -7,8 +7,8 @@
   <xacro:include filename="include/materials.xacro" />
   <xacro:include filename="include/base.xacro" />
   <xacro:include filename="include/drivetrain.xacro" />
-  <xacro:include filename="include/manip.xacro" />
-  <xacro:include filename="include/zed.xacro" />
+  <!-- <xacro:include filename="include/manip.xacro" /> -->
+  <!-- <xacro:include filename="include/zed.xacro" /> -->
   <xacro:include filename="$(find aleph2_description)/ros2_control/aleph2.ros2_control.xacro" />
 
 </robot>
