@@ -11,3 +11,9 @@ aleph2_common build:
   - rosdep install --from-paths . --ignore-src -y
   - colcon build
   - colcon test --return-code-on-test-failure --event-handlers desktop_notification- status- terminal_title- console_cohesion+
+
+nix_build:
+  tags: ["nix"]
+  stage: build
+  script:
+  - nix build .#aleph2_description .#aleph2_teleop .#input_manager
