@@ -21,13 +21,13 @@
   <build_depend>ament_index_cpp</build_depend>
   <build_depend>rclcpp</build_depend>
   <build_depend>sdl2</build_depend>
-  <build_depend>yaml-cppbuild_</build_depend>
+  <build_depend>yaml-cpp</build_depend>
   <build_depend>udev</build_depend>
 
   <exec_depend>ament_index_cpp</exec_depend>
   <exec_depend>rclcpp</exec_depend>
   <exec_depend>sdl2</exec_depend>
-  <exec_depend>yaml-cppbuild_</exec_depend>
+  <exec_depend>yaml-cpp</exec_depend>
   <exec_depend>udev</exec_depend>
   
   <test_depend>ament_lint_auto</test_depend>
