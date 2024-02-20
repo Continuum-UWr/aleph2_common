@@ -18,10 +18,15 @@
 
   <member_of_group>rosidl_interface_packages</member_of_group>
 
-  <depend>rclcpp</depend>
-  <depend>sdl2</depend>
-  <depend>yaml-cpp</depend>
-  <depend>udev</depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>sdl2</build_depend>
+  <build_depend>yaml-cppbuild_</build_depend>
+  <build_depend>udev</build_depend>
+
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>sdl2</exec_depend>
+  <exec_depend>yaml-cppbuild_</exec_depend>
+  <exec_depend>udev</exec_depend>
   
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_cpplint</test_depend>
