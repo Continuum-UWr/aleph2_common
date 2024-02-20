@@ -4,6 +4,7 @@ project(input_manager)
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(SDL2 REQUIRED)
@@ -34,6 +35,7 @@ target_link_libraries(input_manager
   -ludev
   ${YAML_CPP_LIBRARIES}
   SDL2
+  ament_index_cpp::ament_index_cpp
   rclcpp::rclcpp
   ${cpp_typesupport_target}
 )
