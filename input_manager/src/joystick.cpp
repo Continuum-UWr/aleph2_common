@@ -148,27 +148,6 @@ void JoystickManager::threadLoop()
   }
 }
 
-static char * getJoystickPath(SDL_Joystick * joy)
-{
-  /*
-  Exorcizamus te, omnis immundus spiritus, omnis satanica potestas,
-  omnis incursio infernalis adversarii, omnis legio, omnis congregatio et secta diabolica.
-  Ergo, omnis legio diabolica, adiuramus te…cessa decipere humanas creaturas,
-  eisque æternæ perditionìs venenum propinare… Vade, satana, inventor et magister omnis fallaciæ,
-  hostis humanæ salutis…Humiliare sub potenti manu Dei; contremisce et effuge,
-  invocato a nobis sancto et terribili nomine…quem inferi tremunt…Ab insidiis diaboli, libera nos, Domine.
-  Ut Ecclesiam tuam secura tibi facias libertate servire, te rogamus, audi nos.
-  */
-
-  // kurwa do zmiany jak wejdzie SDL 2.24.0 i funkcja SDL_JoystickPath
-  uint8_t * joy_mem = reinterpret_cast<uint8_t *>(joy);
-  uint8_t * hw_data = *reinterpret_cast<uint8_t **>(joy_mem + 184);
-  uint8_t * item = *reinterpret_cast<uint8_t **>(hw_data + 8);
-  char * path = *reinterpret_cast<char **>(item + 8);
-
-  return path;
-}
-
 std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy)
 {
   struct udev * udev;
@@ -177,7 +156,7 @@ std::optional<std::string> JoystickManager::getJoystickSerial(SDL_Joystick * joy
   struct udev_device * u_device;
   const char * serial_id = nullptr;
 
-  std::string path = getJoystickPath(joy);
+  std::string path = SDL_JoystickPath(joy);
   RCLCPP_DEBUG_STREAM(logger_, "Joystick path: " << path);
   /* Create the udev object */
   udev = udev_new();
