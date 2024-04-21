@@ -16,4 +16,4 @@ nix_build:
   tags: ["nix"]
   stage: build
   script:
-  - nix build .#aleph2_description .#aleph2_teleop .#input_manager
+  - nix build .#aleph2_description .#aleph2_teleop .#input_manager --verbose
