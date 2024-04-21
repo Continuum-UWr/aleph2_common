@@ -3,7 +3,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     nix-ros-overlay = {
-      url = "github:lopsided98/nix-ros-overlay";
+      url = "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum";
+      
+      #url = "github:lopsided98/nix-ros-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -13,7 +15,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import nixpkgs { system = system; overlays = [ ]; }).pkgs;
-        ros = (import nixpkgs { system = system; overlays = [ nix-ros-overlay.overlays.default ]; }).pkgs.rosPackages.humble;
+        ros = (import nixpkgs { system = system; overlays = [ nix-ros-overlay.overlays.default ]; }).pkgs.rosPackages.rolling;
 
         aleph2_description = ros.callPackage (import ./aleph2_description) { };
         aleph2_teleop = ros.callPackage (import ./aleph2_teleop) { };

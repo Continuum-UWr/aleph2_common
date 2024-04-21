@@ -5,11 +5,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1705309234,
-        "narHash": "sha256-uNRRNRKmJyCRC/8y1RqBkqWBLM034y4qN7EprSdmgyA=",
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "1ef2e671c3b0c19053962c07dbda38332dcebf26",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
         "type": "github"
       },
       "original": {
@@ -28,26 +28,27 @@
         ]
       },
       "locked": {
-        "lastModified": 1707588628,
-        "narHash": "sha256-2suIXkfQrOtPeLanj9IE/LD8gLe8oBwOUXeG8pbJrEA=",
-        "owner": "lopsided98",
-        "repo": "nix-ros-overlay",
-        "rev": "9f53d85d2a20447f67048a85e5e79e8753dce327",
-        "type": "github"
+        "lastModified": 1713706382,
+        "narHash": "sha256-bILwH6H0Z6kkRWWM719gUJHY1AW1S3qAum6tpO+QtYI=",
+        "ref": "continuum",
+        "rev": "11506ecb7f42f6db4c17a7fce0a0458e4d7aa348",
+        "revCount": 921,
+        "type": "git",
+        "url": "https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay"
       },
       "original": {
-        "owner": "lopsided98",
-        "repo": "nix-ros-overlay",
-        "type": "github"
+        "ref": "continuum",
+        "type": "git",
+        "url": "https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1708552660,
-        "narHash": "sha256-EvYqxeL37/NjdWt1VOUw5xrjoxqL9/rmCtkBZwFXjF8=",
+        "lastModified": 1713706936,
+        "narHash": "sha256-b8Z5ibOlbLvW4EuTeW11NZEi2B8AMdP06bqVOBWPtio=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "3ce7f9e4f54f85c6a94614329d02a3af6d918bc1",
+        "rev": "62f7c1ff246c42a8a4277bb1bea12529f357e2bb",
         "type": "github"
       },
       "original": {
