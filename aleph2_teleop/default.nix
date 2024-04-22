@@ -6,9 +6,11 @@ buildRosPackage {
 
   src = ./.;
 
+  doCheck = true;
+
   buildType = "ament_cmake";
   buildInputs = [ ament-cmake ];
   propagatedBuildInputs = [ joy teleop-twist-joy teleop-twist-keyboard ];
-  check-inputs = [ ament-lint-auto ament-cmake-lint-cmake ament-cmake-xmllint ];
+  checkInputs = [ ament-lint-auto ament-cmake-lint-cmake ament-cmake-xmllint ];
   nativeBuildInputs = [ ament-cmake ];
 }

@@ -8,6 +8,8 @@ buildRosPackage {
 
   src = ./.;
 
+  doCheck = true;
+
   buildType = "ament_cmake";
   buildInputs = [ ament-cmake rosidl-default-generators ];
   propagatedBuildInputs = [
