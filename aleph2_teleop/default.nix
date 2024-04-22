@@ -2,7 +2,7 @@
 , ament-lint-auto, ament-cmake-lint-cmake, ament-cmake-xmllint }:
 buildRosPackage {
   pname = "aleph2_teleop";
-  version = "1.0";
+  version = "0.0.0";
 
   src = ./.;
 
