@@ -28,7 +28,8 @@
         aleph2_teleop = ros.callPackage (import ./aleph2_teleop) { };
         input_manager = ros.callPackage (import ./input_manager) { };
 
-      in {
+      in
+      {
         packages = {
           inherit aleph2_description aleph2_teleop input_manager;
           default = input_manager;
