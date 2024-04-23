@@ -7,6 +7,9 @@ aleph2_common build:
   before_script:
   - apt update
   - rosdep update
+  except:
+    changes:
+    - '*.nix'
   script:
   - rosdep install --from-paths . --ignore-src -y
   - colcon build
