@@ -17,3 +17,9 @@ nix_build:
   stage: build
   script:
   - nix build .#aleph2_description .#aleph2_teleop .#input_manager --verbose
+nix_fmt:
+  tags: ["nix"]
+  stage: build
+  script:
+  - nix-shell -p nixfmt
+  - find . -name '*.nix'  -exec nixfmt -c {} \+
