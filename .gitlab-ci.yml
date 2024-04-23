@@ -24,5 +24,4 @@ nix_fmt:
   tags: ["nix"]
   stage: build
   script:
-  - nix-shell -p nixfmt
-  - find . -name '*.nix'  -exec nixfmt -c {} \+
+  - nix fmt -- -c .
