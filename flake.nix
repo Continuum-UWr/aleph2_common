@@ -24,20 +24,20 @@
           overlays = [ nix-ros-overlay.overlays.default ];
         }).pkgs.rosPackages.rolling;
 
-        aleph2_description = ros.callPackage (import ./aleph2_description) { };
-        aleph2_teleop = ros.callPackage (import ./aleph2_teleop) { };
-        input_manager = ros.callPackage (import ./input_manager) { };
+        aleph2-description = ros.callPackage (import ./aleph2_description) { };
+        aleph2-teleop = ros.callPackage (import ./aleph2_teleop) { };
+        input-manager = ros.callPackage (import ./input_manager) { };
 
       in {
         packages = {
-          inherit aleph2_description aleph2_teleop input_manager;
-          default = input_manager;
+          inherit aleph2-description aleph2-teleop input-manager;
+          default = input-manager;
 
         };
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ aleph2_description aleph2_teleop input_manager ];
+          inputsFrom = [ aleph2-description aleph2-teleop input-manager ];
           packages =
-            [ ros.ros2run aleph2_description aleph2_teleop input_manager ];
+            [ ros.ros2run aleph2-description aleph2-teleop input-manager ];
         };
         formatter = pkgs.nixfmt-classic;
       });

@@ -1,7 +1,7 @@
 { buildRosPackage, ament-cmake, joy, teleop-twist-joy, teleop-twist-keyboard
 , ament-lint-auto, ament-cmake-lint-cmake, ament-cmake-xmllint }:
 buildRosPackage {
-  pname = "aleph2_teleop";
+  pname = "aleph2-teleop";
   version = "0.0.0";
 
   src = ./.;

@@ -1,7 +1,7 @@
 { buildRosPackage, ament-cmake, xacro, robot-state-publisher, ament-lint-auto
 , ament-cmake-lint-cmake, ament-cmake-xmllint }:
 buildRosPackage {
-  pname = "aleph2_description";
+  pname = "aleph2-description";
   version = "0.0.0";
 
   src = ./.;
