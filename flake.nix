@@ -32,6 +32,6 @@
           packages =
             [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
         };
-        formatter = pkgs.nixfmt-classic;
+        formatter = pkgs.nixfmt;
       });
 }
