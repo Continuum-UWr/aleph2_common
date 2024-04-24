@@ -3,7 +3,7 @@
 , ament-lint-auto, ament-cmake-cpplint, ament-cmake-lint-cmake
 , ament-cmake-uncrustify }:
 buildRosPackage {
-  pname = "input_manager";
+  pname = "input-manager";
   version = "0.0.0";
 
   src = ./.;
