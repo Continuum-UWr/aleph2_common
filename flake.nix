@@ -30,7 +30,7 @@
         devShells.default = pkgs.mkShell {
           inputsFrom = [ aleph2-description aleph2-teleop input-manager ];
           packages =
-            [ ros.ros2run aleph2-description aleph2-teleop input-manager ];
+            [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
         };
         formatter = pkgs.nixfmt-classic;
       });
