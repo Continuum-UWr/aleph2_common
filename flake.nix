@@ -1,16 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
-    flake-utils.url = "github:numtide/flake-utils";
-    nix-ros-overlay = {
-      url =
-        "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum";
-
-      #url = "github:lopsided98/nix-ros-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
+    nixpkgs.follows = "nix-ros-overlay/nixpkgs";
+    flake-utils.follows = "nix-ros-overlay/flake-utils";
+    nix-ros-overlay.url =
+      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum";
   };
   outputs = { self, nixpkgs, flake-utils, nix-ros-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -42,4 +35,3 @@
         formatter = pkgs.nixfmt-classic;
       });
 }
-
