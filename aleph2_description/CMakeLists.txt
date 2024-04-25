@@ -19,6 +19,9 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/hooks/gz_sim_resource_path.dsv")
+ament_environment_hooks(
+  "${CMAKE_CURRENT_SOURCE_DIR}/hooks/gz_sim_resource_path.dsv"
+  "${CMAKE_CURRENT_SOURCE_DIR}/hooks/gz_sim_resource_path.sh"
+)
 
 ament_package()
