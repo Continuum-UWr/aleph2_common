@@ -28,9 +28,12 @@
 
         };
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ aleph2-description aleph2-teleop input-manager ];
-          packages =
-            [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
+          nativeBuildInputs = [
+            (ros.buildEnv {
+              paths =
+                [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
+            })
+          ];
         };
         formatter = pkgs.nixfmt;
       });
