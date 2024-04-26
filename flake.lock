@@ -24,16 +24,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1713986063,
-        "narHash": "sha256-WodSJKI/iQn9r228oAGEvA2Q7xApPSh0eQJB+tFomo8=",
-        "ref": "continuum",
-        "rev": "34e1047aa87dace32bca6a165b6b1237fb1ed875",
-        "revCount": 922,
+        "lastModified": 1714148513,
+        "narHash": "sha256-R77xPrCNXzWyhclbY2aIsGHbQSZVgHozo8Jij/iexJo=",
+        "ref": "gz-vendor",
+        "rev": "4ee253095678cc13ca9f60c4e5683cca04341fd0",
+        "revCount": 928,
         "type": "git",
         "url": "https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay"
       },
       "original": {
-        "ref": "continuum",
+        "ref": "gz-vendor",
         "type": "git",
         "url": "https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay"
       }

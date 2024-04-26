@@ -3,7 +3,7 @@
     nixpkgs.follows = "nix-ros-overlay/nixpkgs";
     flake-utils.follows = "nix-ros-overlay/flake-utils";
     nix-ros-overlay.url =
-      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum";
+      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=gz-vendor";
   };
   outputs = { self, nixpkgs, flake-utils, nix-ros-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -21,20 +21,20 @@
         aleph2-teleop = ros.callPackage (import ./aleph2_teleop) { };
         input-manager = ros.callPackage (import ./input_manager) { };
 
+        devEnv = ros.buildEnv {
+          paths =
+            [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
+        };
+
       in {
+        inherit devEnv;
+
         packages = {
           inherit aleph2-description aleph2-teleop input-manager;
           default = input-manager;
 
         };
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = [
-            (ros.buildEnv {
-              paths =
-                [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
-            })
-          ];
-        };
+        devShells.default = pkgs.mkShell { nativeBuildInputs = [ devEnv ]; };
         formatter = pkgs.nixfmt;
       });
 }
