@@ -30,8 +30,12 @@
         packages = {
           inherit aleph2-description aleph2-teleop input-manager devEnv;
           default = input-manager;
-
         };
+
+        devEnvs = {
+          default = devEnv;
+        };
+
         devShells.default = pkgs.mkShell { nativeBuildInputs = [ devEnv ]; };
         formatter = pkgs.nixfmt;
       });
