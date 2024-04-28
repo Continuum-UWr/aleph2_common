@@ -27,13 +27,11 @@
         };
 
       in {
-        packages = {
-          inherit aleph2-description aleph2-teleop input-manager devEnv;
-          default = input-manager;
-        };
+        inherit devEnv;
 
-        devEnvs = {
-          default = devEnv;
+        packages = {
+          inherit aleph2-description aleph2-teleop input-manager;
+          default = input-manager;
         };
 
         devShells.default = pkgs.mkShell { nativeBuildInputs = [ devEnv ]; };
