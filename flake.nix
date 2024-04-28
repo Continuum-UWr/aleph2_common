@@ -27,10 +27,8 @@
         };
 
       in {
-        inherit devEnv;
-
         packages = {
-          inherit aleph2-description aleph2-teleop input-manager;
+          inherit aleph2-description aleph2-teleop input-manager devEnv;
           default = input-manager;
 
         };
