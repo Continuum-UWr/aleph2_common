@@ -10,31 +10,26 @@
       let
         pkgs = (import nixpkgs {
           system = system;
-          overlays = [ ];
-        }).pkgs;
-        ros = (import nixpkgs {
-          system = system;
           overlays = [ nix-ros-overlay.overlays.default ];
-        }).pkgs.rosPackages.rolling;
+        }).pkgs;
+        ros = pkgs.rosPackages.rolling;
 
         aleph2-description = ros.callPackage (import ./aleph2_description) { };
         aleph2-teleop = ros.callPackage (import ./aleph2_teleop) { };
         input-manager = ros.callPackage (import ./input_manager) { };
 
+        devEnv = ros.buildEnv {
+          paths =
+            [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
+        };
+
       in {
         packages = {
-          inherit aleph2-description aleph2-teleop input-manager;
+          inherit aleph2-description aleph2-teleop input-manager devEnv;
           default = input-manager;
+        };
 
-        };
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = [
-            (ros.buildEnv {
-              paths =
-                [ ros.ros-core aleph2-description aleph2-teleop input-manager ];
-            })
-          ];
-        };
+        devShells.default = pkgs.mkShell { nativeBuildInputs = [ devEnv ]; };
         formatter = pkgs.nixfmt;
       });
 }
