@@ -1,6 +1,6 @@
 <launch version="0.1.1">
   <arg name="joy_dev_id" default="0" description="Joystick device id" />
-  <arg name="cmd_vel_out" default="cmd_vel"
+  <arg name="cmd_vel_out" default="/diff_drive_controller/cmd_vel"
     description="Topic to send velocity commands on" />
   <arg name="joy_config_file"
     default="$(find-pkg-share aleph2_teleop)/config/joy_config.yaml"
@@ -14,6 +14,7 @@
 
   <node name="joy_teleop_node" pkg="teleop_twist_joy" exec="teleop_node">
     <param from="$(var joy_config_file)" />
+    <param name="publish_stamped_twist" value="true" />
     <remap from="cmd_vel" to="$(var cmd_vel_out)" />
   </node>
 </launch>
