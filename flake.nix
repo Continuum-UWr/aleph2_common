@@ -3,7 +3,7 @@
     nixpkgs.follows = "nix-ros-overlay/nixpkgs";
     flake-utils.follows = "nix-ros-overlay/flake-utils";
     nix-ros-overlay.url =
-      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum";
+      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum-update";
   };
   outputs = { self, nixpkgs, flake-utils, nix-ros-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -12,7 +12,7 @@
           system = system;
           overlays = [ nix-ros-overlay.overlays.default ];
         }).pkgs;
-        ros = pkgs.rosPackages.rolling;
+        ros = pkgs.rosPackages.jazzy;
 
         aleph2-description = ros.callPackage (import ./aleph2_description) { };
         aleph2-teleop = ros.callPackage (import ./aleph2_teleop) { };
