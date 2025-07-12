@@ -24,11 +24,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1720127439,
-        "narHash": "sha256-8ugpliPeAoRE7yGtdueu2jZanaVa5VYWrFfmPcy1AzE=",
+        "lastModified": 1752330713,
+        "narHash": "sha256-jFQ66jyb1bRT8J9CdkSPDqRHAWdyfu23xPLGqSnQsD4=",
         "ref": "continuum",
-        "rev": "a5fe6791526ebada2915ff5ad827e6a022ebd233",
-        "revCount": 927,
+        "rev": "82a97d29d7d97c3076b940713cbc3baa81f80c7e",
+        "revCount": 928,
         "type": "git",
         "url": "https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay"
       },
