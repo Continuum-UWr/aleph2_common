@@ -2,8 +2,7 @@
   inputs = {
     nixpkgs.follows = "nix-ros-overlay/nixpkgs";
     flake-utils.follows = "nix-ros-overlay/flake-utils";
-    nix-ros-overlay.url =
-      "git+https://gitlab.continuum.ii.uni.wroc.pl/continuum/software/nix-ros-overlay?ref=continuum-update";
+    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay";
   };
   outputs = { self, nixpkgs, flake-utils, nix-ros-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
