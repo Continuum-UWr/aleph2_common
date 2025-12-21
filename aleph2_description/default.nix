@@ -1,5 +1,12 @@
-{ buildRosPackage, ament-cmake, xacro, robot-state-publisher, ament-lint-auto
-, ament-cmake-lint-cmake, ament-cmake-xmllint }:
+{
+  buildRosPackage,
+  ament-cmake,
+  xacro,
+  robot-state-publisher,
+  ament-lint-auto,
+  ament-cmake-lint-cmake,
+  ament-cmake-xmllint,
+}:
 buildRosPackage {
   pname = "aleph2-description";
   version = "0.0.0";
@@ -10,7 +17,14 @@ buildRosPackage {
 
   buildType = "ament_cmake";
   buildInputs = [ ament-cmake ];
-  propagatedBuildInputs = [ xacro robot-state-publisher ];
-  checkInputs = [ ament-lint-auto ament-cmake-lint-cmake ament-cmake-xmllint ];
+  propagatedBuildInputs = [
+    xacro
+    robot-state-publisher
+  ];
+  checkInputs = [
+    ament-lint-auto
+    ament-cmake-lint-cmake
+    ament-cmake-xmllint
+  ];
   nativeBuildInputs = [ ament-cmake ];
 }
