@@ -48,6 +48,11 @@
 
         devShells.default = pkgs.mkShell { nativeBuildInputs = [ devEnv ]; };
         formatter = pkgs.nixfmt;
+
       }
     );
+  nixConfig = {
+    extra-substituters = [ "https://nix-continuum.s3-web.uwukado.me" ];
+    extra-trusted-public-keys = [ "nix-continuum:rc3o+NH47H8tmR2RW1fE6NWfRtzNP20ClkTnVgCOteA=" ];
+  };
 }
